@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -5,11 +6,48 @@ using UnityEngine;
 
 public class Tile : MonoBehaviour
 {
-    public bool isRevealed;
-    public int dangerLevel;
-    public TileContent tileContent;
-    [SerializeField] Sprite[] dangerLevelSpriteArray;
-    [SerializeField] Sprite tileContentSprite;
+    public bool isRevealed
+    {
+        get
+        {
+            return isRevealed;
+        }
+        set
+        {
+            isRevealed = value;
+            ChangeSprite();
+        }
+    }
+
+    public int dangerLevel
+    {
+        get
+        {
+            return dangerLevel;
+        }
+
+        set
+        {
+            dangerLevel = value;
+            ChangeSprite();
+        }
+    }
+
+    public TileContent tileContent
+    {
+        get
+        {
+            return tileContent;
+        }
+        set
+        {
+            tileContent = value;
+            ChangeSprite();
+        }
+    }
+
+    public Sprite _dangerLevelSprite;
+    public Sprite _tileContentSprite;
     public SpriteRenderer dangerLevelRenderer;
     public SpriteRenderer tileContentRenderer;
 
@@ -29,5 +67,11 @@ public class Tile : MonoBehaviour
         this.isRevealed = isRevealed;
         this.dangerLevel = dangerLevel;
         this.tileContent = tileContent;
+    }
+
+
+    private void ChangeSprite()
+    {
+        throw new NotImplementedException();
     }
 }
