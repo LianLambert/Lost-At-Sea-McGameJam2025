@@ -18,7 +18,7 @@ public class Tile : MonoBehaviour
         set
         {
             dangerLevel = value;
-            ChangeSprite();
+            ChangeSpriteWater();
         }
     }
 
@@ -31,12 +31,10 @@ public class Tile : MonoBehaviour
         set
         {
             tileContent = value;
-            ChangeSprite();
+            ChangeSpriteTileContent();
         }
     }
 
-    public Sprite dangerLevelSprite;
-    public Sprite tileContentSprite;
     public SpriteRenderer dangerLevelRenderer;
     public SpriteRenderer tileContentRenderer;
 
@@ -62,7 +60,8 @@ public class Tile : MonoBehaviour
     public void RevealTile(bool isClicked)
     {
         isRevealed = true;
-        ChangeSprite();
+        ChangeSpriteWater();
+        ChangeSpriteTileContent();
         switch (tileContent) {
             case TileContent.Shark:
                 SharkBite();
@@ -93,40 +92,33 @@ public class Tile : MonoBehaviour
         GameManager.lifePoints--;
     }
 
-    private void ChangeSprite()
-    {
-        ChangeSpriteWater();
-    }
-
     private void ChangeSpriteWater()
     {
-        if (isRevealed)
+        // Clear water
+        if (dangerLevel == 0)
         {
-            // Clear water
-            if (dangerLevel == 0)
-            {
-                dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_0");
-            }
-            // 1-2 Sharks
-            else if (dangerLevel > 0 && dangerLevel < 3) 
-            {
-                dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_1");
-            }
-            // 3-4 sharkss
-            else if (dangerLevel > 2 && dangerLevel < 5)
-            {
-                dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_2");
-            }
-            // 5+ sharks
-            else
-            {
-                dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_3");
-            }
+            dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_0");
         }
+        // 1-2 Sharks
+        else if (dangerLevel > 0 && dangerLevel < 3) 
+        {
+            dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_1");
+        }
+        // 3-4 sharkss
+        else if (dangerLevel > 2 && dangerLevel < 5)
+        {
+            dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_2");
+        }
+        // 5+ sharks
         else
         {
-            dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_4");
+            dangerLevelRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_3");
         }
+    }
+
+    private void ChangeSpriteTileContent()
+    {
+
     }
 
 }
