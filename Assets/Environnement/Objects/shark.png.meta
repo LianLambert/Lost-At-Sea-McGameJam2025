@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 12836f0eada920248807f039f74ccbcd
+guid: e48b1350d9728834aac371c961297d4d
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,7 +97,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: darker_shade_0
+      name: shark_0
       rect:
         serializedVersion: 2
         x: 0
@@ -111,14 +111,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d99fec23aed27fe439170fa41044954c
-      internalID: -962889707
+      spriteID: c5caec2cd313b4641af0a5539d2339a3
+      internalID: -26467691
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: darker_shade_1
+      name: shark_1
       rect:
         serializedVersion: 2
         x: 32
@@ -132,8 +132,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 50e6cf3b4899c0742acb4d6b1a0fe16e
-      internalID: -1272073370
+      spriteID: cea2f1252b555094196facd0912ba478
+      internalID: -1392354910
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shark_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce5aea012f338f649becf8d5c2140da4
+      internalID: -1540295057
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: shark_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ddd44abf3b54e634bb308625ebf90ddc
+      internalID: 1991159259
       vertices: []
       indices: 
       edges: []
@@ -149,8 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      darker_shade_0: -962889707
-      darker_shade_1: -1272073370
+      shark_0: -26467691
+      shark_1: -1392354910
+      shark_2: -1540295057
+      shark_3: 1991159259
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
