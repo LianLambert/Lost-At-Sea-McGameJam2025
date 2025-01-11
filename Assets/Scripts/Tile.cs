@@ -6,7 +6,7 @@ public class Tile : MonoBehaviour
 {
     public bool isRevealed;
     public int dangerLevel;
-    public GameObject itemContained;
+    public TileContent tileContent;
     [SerializeField] Sprite currentSprite;
     [SerializeField] SpriteRenderer currentRenderer;
     [SerializeField] Animation tileAnimation;
