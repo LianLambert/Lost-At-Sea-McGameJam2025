@@ -19,20 +19,15 @@ public class Tile : MonoBehaviour
 
     }
 
-    public Tile(bool isRevealed, int dangerLevel, TileContent tileContent){
-        this.isRevealed = isRevealed;
-        this.dangerLevel = dangerLevel;
-        this.tileContent = tileContent;
-    }
-
     // Update is called once per frame
     void Update()
     {
-        ChangeSprite();
-    }
 
-    private void ChangeSprite()
+    }
+    public void Initialize(bool isRevealed, int dangerLevel, TileContent tileContent)
     {
-        
+        this.isRevealed = isRevealed;
+        this.dangerLevel = dangerLevel;
+        this.tileContent = tileContent;
     }
 }
