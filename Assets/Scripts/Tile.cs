@@ -8,29 +8,31 @@ public class Tile : MonoBehaviour
 {
     public bool isRevealed;
 
+    private int _dangerLevel;
     public int dangerLevel
     {
         get
         {
-            return dangerLevel;
+            return _dangerLevel;
         }
 
         set
         {
-            dangerLevel = value;
+            _dangerLevel = value;
             ChangeSpriteWater();
         }
     }
 
+    private TileContent _tileContent;
     public TileContent tileContent
     {
         get
         {
-            return tileContent;
+            return _tileContent;
         }
         set
         {
-            tileContent = value;
+            _tileContent = value;
             ChangeSpriteTileContent();
         }
     }
@@ -78,6 +80,9 @@ public class Tile : MonoBehaviour
                 GameManager.coins += 50;
                 treasureObtained();
                 break;
+            case TileContent.Boat:
+                GameManager.boatCount++;
+                break;
         }
     }
 
@@ -118,7 +123,14 @@ public class Tile : MonoBehaviour
 
     private void ChangeSpriteTileContent()
     {
+        if (isRevealed)
+        {
 
+        }
+        else
+        {
+            tileContentRenderer.sprite = Resources.Load<Sprite>("Environnement/Prefab/shade_4");
+        }
     }
 
 }
