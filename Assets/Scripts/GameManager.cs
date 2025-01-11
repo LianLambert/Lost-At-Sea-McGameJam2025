@@ -46,9 +46,10 @@ public class GameManager : MonoBehaviour
     }
 
     public static int numCoins;
-    public static int timeLeft;
+    public static int timeRemaining;
+    public static int numTilesRevealed;
     public static int numBoatGoal;
-    public Difficulty difficulty;
+    public static Difficulty difficulty;
     public static Animator WinStates;
 
 
@@ -57,25 +58,26 @@ public class GameManager : MonoBehaviour
     {
         numBoats = 0;
         numLives = 3;
+        numTilesRevealed = 0;
 
         // TO DO: Manage these values when playtesting
         switch (difficulty)
         {
             case Difficulty.Easy:
                 numCoins = 50;
-                timeLeft = 300;
+                timeRemaining = 300;
                 numBoatGoal = 1;
                 break;
 
             case Difficulty.Medium:
                 numCoins = 80;
-                timeLeft = 400;
+                timeRemaining = 400;
                 numBoatGoal = 3;
                 break;
 
             case Difficulty.Hard:
                 numCoins = 100;
-                timeLeft = 500;
+                timeRemaining = 500;
                 numBoatGoal = 5;
                 break;
         }
@@ -102,12 +104,30 @@ public class GameManager : MonoBehaviour
 
     IEnumerator TimerCountdown()
     {
-        while (timeLeft > 0)
+        while (timeRemaining > 0)
         {
             yield return new WaitForSeconds(1);
-            timeLeft--;
+            timeRemaining--;
         }
 
         StartGameLoss();
+    }
+
+    // Pausing the game, covering the screen
+    public void Pause()
+    {
+        // TO DO
+    }
+
+    // Resume the game, removing the screen cover
+    public void Resume()
+    {
+        // TO DO
+    }
+
+    // Quitting the game, going back to main menu
+    public void Quit()
+    {
+        // TO DO
     }
 }

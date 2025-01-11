@@ -3,8 +3,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
-public class Tile : MonoBehaviour
+public class Tile : TileBase
 {
     public bool isRevealed;
 
@@ -62,8 +63,11 @@ public class Tile : MonoBehaviour
     public void RevealTile(bool isClicked)
     {
         isRevealed = true;
+        GameManager.numTilesRevealed++;
+
         ChangeSpriteWater();
         ChangeSpriteTileContent();
+
         switch (tileContent) {
             case TileContent.Shark:
                 SharkBite();
