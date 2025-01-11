@@ -69,19 +69,19 @@ public class Tile : MonoBehaviour
                 SharkBite();
                 break;
             case TileContent.TreasureSmall:
-                GameManager.coins += 10;
+                GameManager.numCoins += 10;
                 treasureObtained();
                 break;
             case TileContent.TreasureMedium:
-                GameManager.coins += 20;
+                GameManager.numCoins += 20;
                 treasureObtained();
                 break;
             case TileContent.TreasureLarge:
-                GameManager.coins += 50;
+                GameManager.numCoins += 50;
                 treasureObtained();
                 break;
             case TileContent.Boat:
-                GameManager.boatCount++;
+                GameManager.numBoats++;
                 break;
         }
     }
@@ -94,7 +94,7 @@ public class Tile : MonoBehaviour
     // Player loses a life from revealing a shark
     private void SharkBite()
     {
-        GameManager.lifePoints--;
+        GameManager.numLives--;
     }
 
     private void ChangeSpriteWater()
