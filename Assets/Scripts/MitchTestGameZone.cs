@@ -5,6 +5,7 @@ public class GameZone : MonoBehaviour
 {
     private Tilemap _gameZoneTilemap;
     private TilesHolder _tilesHolder;
+    public int size;
 
     Vector3Int origin;
 
@@ -16,8 +17,8 @@ public class GameZone : MonoBehaviour
 
     private void Start()
     {
-        var columns = 15;
-        var rows = 15;
+        var columns = size;
+        var rows = size;
 
         // Origin point for the tilemap
         origin = _gameZoneTilemap.origin;
