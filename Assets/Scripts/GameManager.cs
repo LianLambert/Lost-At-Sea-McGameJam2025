@@ -58,6 +58,7 @@ public class GameManager : MonoBehaviour
     public static int numBoatGoal;
     public static Difficulty difficulty;
     public static Animator WinStates;
+    public static bool gameIsOver = false;
 
     private void Awake()
     {
@@ -119,7 +120,7 @@ public class GameManager : MonoBehaviour
         //WinStates.Play("GameWin");
 
         //TODO Play Win Sound/Animations
-
+        gameIsOver = true;
         _instance.StartCoroutine(_instance.DelayedWinReveal());
     }
 
@@ -148,6 +149,9 @@ public class GameManager : MonoBehaviour
 
     void TimerCountdown()
     {
+        if (gameIsOver)
+            return;
+
         if (timeRemaining == 0)
         {
             StartGameLoss();

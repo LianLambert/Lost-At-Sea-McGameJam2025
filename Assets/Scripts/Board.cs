@@ -58,6 +58,9 @@ public class Board : MonoBehaviour
 
     private void Update()
     {
+        if (GameManager.gameIsOver)
+            return;
+
         if (Input.GetMouseButtonDown(0))
         {
             GetTileOnClick();

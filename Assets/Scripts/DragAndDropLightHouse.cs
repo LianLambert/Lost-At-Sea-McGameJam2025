@@ -15,6 +15,9 @@ public class DragAndDropLightHouse : MonoBehaviour, IPointerDownHandler, IDragHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
+        if (GameManager.gameIsOver)
+            return;
+
         if (!isDragging && GameManager.numLightHouses > 0)
         {
             isDragging = true;
