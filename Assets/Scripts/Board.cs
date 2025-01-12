@@ -19,6 +19,10 @@ public class Board : MonoBehaviour
 
     // tilemap fields
     private Tilemap tilemap;
+    public Tilemap shadowTileMap;
+    public Tilemap BelowTitleMap;
+
+
     private TilesHolder boardTileHolder;
     private Vector3Int origin => tilemap.origin;
 
@@ -49,6 +53,28 @@ public class Board : MonoBehaviour
         {
             GetTileOnClick();
         }
+        else if (Input.GetMouseButtonUp(0)) // Detect when the mouse button is released
+        {
+            HandleDropAction();
+        }
+    }
+
+    private void HandleDropAction()
+    {
+        if (DragAndDropLightHouse.isDragging)
+        {
+            // Get the position of the mouse in world space
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            worldPosition.z = 0f; // Ensure the z-coordinate is 0 for 2D
+
+            // Convert the world position to a cell position
+            Vector3Int cellPosition = tilemap.WorldToCell(worldPosition);
+            MinesweeperTile droppedTile = tilemap.GetTile(cellPosition) as MinesweeperTile;
+
+            Destroy(FindObjectOfType<DragAndDropLightHouse>().currentPrefab);
+            DragAndDropLightHouse.isDragging = false;
+            PlaceLighthouse(droppedTile, LightHouseType.Basic);
+        }
     }
 
     private void AdjustCamera(int width, int height)
@@ -57,7 +83,7 @@ public class Board : MonoBehaviour
         if (camera != null)
         {
             camera.transform.position = new Vector3(width / 2f, height / 2f, camera.transform.position.z);
-            camera.orthographicSize = Mathf.Max(width, height) / 2f;
+            camera.orthographicSize = (Mathf.Max(width, height) / 2f) + 1.5f;
         }
     }
 
@@ -366,6 +392,49 @@ public class Board : MonoBehaviour
         if (tile.tileContent == TileContent.Lighthouse)
             tile.m_AnimatedSprites = boardTileHolder.GetLightHouse().m_AnimatedSprites;
 
+
+        UpdateSpriteLayers(tile);
         tilemap.RefreshTile(GetCoordsByTile(tile));
+    }
+
+    private void UpdateSpriteLayers(MinesweeperTile tile)
+    {
+        var item = tile.tileContent;
+        var position = GetCoordsByTile(tile);
+
+        if (item == TileContent.Shark)
+        {
+            tile.m_MaxSpeed = 8;
+            tile.m_MinSpeed = 8;
+            var shadowTile = Instantiate<MinesweeperTile>(boardTileHolder.GetSharkShadow());
+            shadowTile.m_MaxSpeed = 6;
+            shadowTile.m_MinSpeed = 6;
+            shadowTileMap.SetTile(position, shadowTile);
+            BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
+        }
+        else if (item == TileContent.Boat)
+        {
+            tile.m_MaxSpeed = 6;
+            tile.m_MinSpeed = 6;
+            shadowTileMap.SetTile(position, null);
+            var danger = GetTileDangerLevelByCoord(position.x, position.y);
+            if (danger == 0)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
+            if (danger == 1 || danger == 2)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterMediumTile()));
+            if (danger == 3)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkerTile()));
+            if (danger >= 4)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
+            // TODO Make sure boat water levels reflect danger levels if we agree it looks nice
+        }
+        else
+        {
+            tile.m_MaxSpeed = 2;
+            tile.m_MinSpeed = 2;
+            shadowTileMap.SetTile(position, null);
+            BelowTitleMap.SetTile(position, null);
+        }
+
     }
 }
