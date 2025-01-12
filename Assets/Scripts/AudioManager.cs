@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class AudioManager : MonoBehaviour
 {
@@ -21,6 +22,20 @@ public class AudioManager : MonoBehaviour
         musicSource.loop = true;
         LoadAllAudioClips();
         LoadAllMusicClips();
+
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            PlayMusic("Menu Theme - Guiding Light");
+            Debug.Log("menu music!");
+
+
+        }
+
+        if (SceneManager.GetActiveScene().name == "SampleScene 1")
+        {
+            PlayMusic("Level Theme - Lost at Sea");
+            Debug.Log("level music!");
+        }
     }
 
     private void LoadAllMusicClips()
