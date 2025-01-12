@@ -159,7 +159,13 @@ public class Board : MonoBehaviour
         // Get the tile at the clicked cell position
         MinesweeperTile clickedTile = tilemap.GetTile(cellPosition) as MinesweeperTile;
 
-        if (clickedTile != null && !clickedTile.isRevealed)
+        if (clickedTile.sharkMarker)
+        {
+            Destroy(clickedTile.sharkMarker);
+            clickedTile.sharkMarker = null;
+
+        }
+        else if (clickedTile != null && !clickedTile.isRevealed)
         {
             RevealTile(clickedTile, true);
         }
