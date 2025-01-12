@@ -339,7 +339,7 @@ public class Board : MonoBehaviour
 
                     foreach (MinesweeperTile neighbourTile in GetTileNeighboursByCoord(tileCoords.x, tileCoords.y))
                     {
-                        if (!neighbourTile.isRevealed)
+                        if (!neighbourTile.isRevealed && neighbourTile.tileContent != TileContent.Boat)
                         {
                             StartCoroutine(CallRevealTileAfterDelay(neighbourTile, false));
                         }
