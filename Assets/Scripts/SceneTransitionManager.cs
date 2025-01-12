@@ -28,7 +28,7 @@ public class SceneTransitionManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    public void Start()
     {
         // Start with a fade-in effect
         if (fadeImage != null)
@@ -37,18 +37,19 @@ public class SceneTransitionManager : MonoBehaviour
             //StartCoroutine(FadeIn());
         }
 
+        Debug.Log(SceneManager.GetActiveScene().name);
+
+
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
             Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
-            Debug.Log("menu music!");
 
 
         }
 
-        if (SceneManager.GetActiveScene().name == "SampleScene1")
+        if (SceneManager.GetActiveScene().name == "SampleScene 1")
         {
             Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
-            Debug.Log("level music!");
         }
     }
 
