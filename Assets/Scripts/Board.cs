@@ -177,11 +177,8 @@ public class Board : MonoBehaviour
 
             if (tilemap.HasTile(neighbourPosition))
             {
-                TileBase tile = tilemap.GetTile(neighbourPosition);
-                if (tile is MinesweeperTile minesweeperTile)
-                {
-                    neighbours.Add(minesweeperTile);
-                }
+                MinesweeperTile tile = tilemap.GetTile(neighbourPosition) as MinesweeperTile;
+                neighbours.Add(tile);
             }
         }
 
@@ -196,14 +193,8 @@ public class Board : MonoBehaviour
         }
 
         Vector3Int tilePosition = new(tileCol, tileRow, 0);
-        TileBase tileAtPosition = tilemap.GetTile(tilePosition);
-
-        if (tileAtPosition is MinesweeperTile minesweeperTile)
-        {
-            return minesweeperTile;
-        }
-
-        throw new ArgumentException("The specified tile is not of type MinesweeperTile");
+        MinesweeperTile tileAtPosition = tilemap.GetTile(tilePosition) as MinesweeperTile;
+        return tileAtPosition;
 
     }
 
@@ -217,7 +208,7 @@ public class Board : MonoBehaviour
             for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
                 Vector3Int position = new Vector3Int(x, y, 0);
-                TileBase tile = tilemap.GetTile(position);
+                MinesweeperTile tile = tilemap.GetTile(position) as MinesweeperTile;
 
                 // check if tile matches target tile
                 if (tile == targetTile)
