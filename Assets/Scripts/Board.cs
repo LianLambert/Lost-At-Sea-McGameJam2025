@@ -389,6 +389,12 @@ public class Board : MonoBehaviour
         // visibly reveal Tile
         tile.isRevealed = true;
 
+        // Tile click sound effect
+        if (wasClicked)
+        {
+            Camera.main.GetComponent<AudioManager>().PlaySound("tile-click");
+        }
+
         // update tile sprite
         UpdateTileSprite(tile);
 
@@ -412,21 +418,29 @@ public class Board : MonoBehaviour
                 break;
             case TileContent.Boat:
                 OnBoatOrTreasureRevealed(tile, BoatPrefab);
+                Camera.main.GetComponent<AudioManager>().PlaySound("BoatReveal - FirstBoat");
                 GameManager.numBoatsCollected++;
                 break;
             case TileContent.Shark:
                 if (wasClicked)
                 {
                     // to do: add animation
+                    Camera.main.GetComponent<AudioManager>().PlaySound("SharkReveal - Bad");
                     GameManager.numLives -= 1;
                     GameObject.FindGameObjectWithTag("HeartText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLives.ToString();
 
+                }
+                else
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("SharkReveal - Lighthouse");
                 }
                 break;
             case TileContent.TreasureSmall:
             case TileContent.TreasureMedium:
             case TileContent.TreasureLarge:
                 OnBoatOrTreasureRevealed(tile, TreasurePrefab);
+                Camera.main.GetComponent<AudioManager>().PlaySound("TreasureReveal");
+
 
                 if (propagateTiles && tile.dangerLevel == 0)
                 {
@@ -496,6 +510,7 @@ public class Board : MonoBehaviour
                 break;
         }
 
+        Camera.main.GetComponent<AudioManager>().PlaySound("lighthouse-placing");
         // reveal the tile and update the sprite
         RevealTile(tile, false);
 
