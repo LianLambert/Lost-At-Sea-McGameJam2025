@@ -36,6 +36,20 @@ public class SceneTransitionManager : MonoBehaviour
             fadeImage.gameObject.SetActive(true);
             //StartCoroutine(FadeIn());
         }
+
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
+            Debug.Log("menu music!");
+
+
+        }
+
+        if (SceneManager.GetActiveScene().name == "SampleScene1")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
+            Debug.Log("level music!");
+        }
     }
 
     /// <summary>
@@ -47,6 +61,17 @@ public class SceneTransitionManager : MonoBehaviour
         if (!isTransitioning)
         {
             StartCoroutine(Transition(sceneName));
+        }
+
+        if (sceneName == "MainMenu")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
+
+        }
+
+        if (sceneName == "SampleScene1")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
         }
     }
 

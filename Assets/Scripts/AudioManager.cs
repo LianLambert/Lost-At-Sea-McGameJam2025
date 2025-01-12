@@ -56,6 +56,9 @@ public class AudioManager : MonoBehaviour
             audioSource.PlayOneShot(clip);
             playingSounds.Add(clipName);
 
+            // Remove clip from list of playing clips
+            StartCoroutine(RemoveFromPlayingSounds(clipName, clip.length));
+
         }
 
     }
