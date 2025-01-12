@@ -12,6 +12,7 @@ TagManager:
   - DebtPanel
   - HeartText
   - LossPanel
+  - PrizeWheel
   layers:
   - Default
   - TransparentFX
