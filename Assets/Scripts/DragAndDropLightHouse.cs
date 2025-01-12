@@ -15,7 +15,7 @@ public class DragAndDropLightHouse : MonoBehaviour, IPointerDownHandler, IDragHa
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!isDragging)
+        if (!isDragging && GameManager.numLightHouses > 0)
         {
             isDragging = true;
             Vector3 mousePosition = mainCamera.ScreenToWorldPoint(eventData.position);
