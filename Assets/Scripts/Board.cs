@@ -77,12 +77,6 @@ public class Board : MonoBehaviour
         {
             RevealTile(clickedTile, true);
         }
-
-        Debug.Log(clickedTile);
-        if (clickedTile != null)
-        {
-            Debug.Log(GetCoordsByTile(clickedTile));
-        }
     }
 
     // adds shore tiles and empty water tiles
