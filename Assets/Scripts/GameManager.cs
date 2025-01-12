@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private static GameManager _instance;
+    public static GameManager _instance;
 
     public static int numLightHouses;
     private static int _numLives;
@@ -215,23 +215,5 @@ public class GameManager : MonoBehaviour
         {
             Debug.LogError("DebtPanel not found!");
         }
-    }
-}
-
-
-public class FindInactiveByTag : MonoBehaviour
-{
-    public static GameObject FindInactiveGameObjectByTag(string tag)
-    {
-        GameObject[] allGameObjects = Resources.FindObjectsOfTypeAll<GameObject>();
-        foreach (GameObject obj in allGameObjects)
-        {
-            if (obj.CompareTag(tag) && obj.hideFlags == HideFlags.None)
-            {
-                return obj;
-            }
-        }
-
-        return null; // Return null if no matching GameObject is found
     }
 }

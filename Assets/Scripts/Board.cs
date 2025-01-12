@@ -52,6 +52,7 @@ public class Board : MonoBehaviour
     public void Start()
     {
         tilemap.ClearAllTiles();
+                AdjustCamera(rows, columns);
 
         GenerateEmptyBoard();
 
@@ -61,7 +62,6 @@ public class Board : MonoBehaviour
 
         // update danger levels
         UpdateBoardDangerLevels();
-        AdjustCamera(rows, columns);
     }
 
     private void Update()
