@@ -180,6 +180,23 @@ public class GameManager : MonoBehaviour
     {
         // TO DO
     }
+
+    // to do: use this function
+    // called if you try to spin the wheel and you end up with a negative balance
+    // you can "start" spin if you have a positive balance
+    private void DebtCollection()
+    {
+        // Reveal the debt panel
+        var DebtPanel = FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel");
+        if (DebtPanel != null)
+        {
+            DebtPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("DebtPanel not found!");
+        }
+    }
 }
 
 
