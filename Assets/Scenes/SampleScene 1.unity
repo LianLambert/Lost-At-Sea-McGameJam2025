@@ -1015,8 +1015,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 756.70404, y: 0.00024414062}
-  m_SizeDelta: {x: -1513.4102, y: 0.00048828}
+  m_AnchoredPosition: {x: 756.7, y: 0}
+  m_SizeDelta: {x: -1513.4, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &450992766
 MonoBehaviour:
@@ -7920,7 +7920,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rows: 20
   columns: 20
-  difficulty: 0
+  difficulty: 2
   shadowTileMap: {fileID: 1208897326}
   BelowTileMap: {fileID: 60084253}
   SharkMarkerTileMap: {fileID: 398844461}
