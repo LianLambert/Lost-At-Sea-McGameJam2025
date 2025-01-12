@@ -94,12 +94,14 @@ public class GameManager : MonoBehaviour
 
     private static void StartGameLoss()
     {
-        WinStates.Play("GameLoss");
+        // to do: implement
+        // WinStates.Play("GameLoss");
     }
 
     private static void StartGameWin()
     {
-        WinStates.Play("GameWin");
+        // to do: implement
+        // WinStates.Play("GameWin");
     }
 
     IEnumerator TimerCountdown()
