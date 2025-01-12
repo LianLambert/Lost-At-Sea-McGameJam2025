@@ -9,7 +9,6 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 using TMPro;
-using UnityEngine.WSA;
 
 public class Board : MonoBehaviour
 {
