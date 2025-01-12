@@ -66,6 +66,8 @@ public class Board : MonoBehaviour
 
         // update danger levels
         UpdateBoardDangerLevels();
+
+        GameObject.FindGameObjectWithTag("HeartText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLives.ToString();
     }
 
     private void Update()
