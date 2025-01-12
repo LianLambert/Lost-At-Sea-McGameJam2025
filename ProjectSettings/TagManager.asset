@@ -4,11 +4,12 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - NumCoinsText
-  - NumBoats
-  - NumTimeLeft
-  - NumLightHouses
   - WinPanel
+  - NumTimeLeft
+  - NumBoats
+  - NumCoinsText
+  - NumLightHouses
+  - DebtPanel
   layers:
   - Default
   - TransparentFX

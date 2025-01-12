@@ -557,7 +557,7 @@ public class Board : MonoBehaviour
         // get danger level and position
         int dangerNumber = tile.dangerLevel;
 
-        if (tile.tileContent == TileContent.Shark || dangerNumber == 0)
+        if (tile.tileContent == TileContent.Shark || tile.tileContent == TileContent.Boat || tile.tileContent == TileContent.Lighthouse || dangerNumber == 0)
         {
             return;
         }
