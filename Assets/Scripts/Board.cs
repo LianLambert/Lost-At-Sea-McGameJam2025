@@ -36,7 +36,7 @@ public class Board : MonoBehaviour
         propagateTiles = val;
     }
 
-    private bool propagateTiles = true;
+    private bool propagateTiles = false;
     public GameObject DangerNumberText;
     public GameObject SharkMarkerX;
     public GameObject BoatPrefab;
