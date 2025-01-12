@@ -3,68 +3,107 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using UnityEngine.Tilemaps;
+using static UnityEngine.UI.Image;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEngine.UIElements;
 
 public class Board : MonoBehaviour
 {
     public int rows;
     public int columns;
     public Difficulty difficulty;
-    public GameObject[,] board;
-    public GameObject blankTile;
     private NumItemsByDifficulty numItems;
+
+    // fields below used to create TileMap
+    private Tilemap tilemap;
+    private TilesHolder boardTileHolder;
+    private Vector3Int origin;
+
+    public void Awake()
+    {
+        tilemap = GetComponent<Tilemap>();
+        boardTileHolder = GetComponent<TilesHolder>();
+    }
 
     public void Start()
     {
-        board = GenerateEmptyBoard();
+        // origin point for tilemap
+        origin = tilemap.origin;
+        tilemap.ClearAllTiles();
+
+        GenerateEmptyBoard();
 
         // populate board given items (calculated by difficulty)
         numItems = new NumItemsByDifficulty(difficulty, rows * columns);
         PopulateBoardItems();
 
         // update danger levels
-        UpdateBoardDangerLevels();
+        //UpdateBoardDangerLevels();
+    }
 
+    private void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            GetTileOnClick();
+        }
+    }
+
+    private void GetTileOnClick()
+    {
+        // Get the position of the mouse in world space
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        worldPosition.z = 0f; // Ensure the z-coordinate is 0 for 2D
+
+        // Convert the world position to a cell position
+        Vector3Int cellPosition = tilemap.WorldToCell(worldPosition);
+
+        // Get the tile at the clicked cell position
+        MinesweeperTile clickedTile = tilemap.GetTile(cellPosition) as MinesweeperTile;
+
+        if (clickedTile != null && !clickedTile.isRevealed)
+        {
+            RevealTile(clickedTile, true);
+        }
     }
 
     // adds shore tiles and empty water tiles
-    private GameObject[,] GenerateEmptyBoard()
+    private void GenerateEmptyBoard()
     {
-        GameObject[,] emptyBoard = new GameObject[rows, columns];
-
-        for (int i = 0; i < rows; i++)
+        for (int y = 0; y < rows; y++)
         {
-            for (int j = 0; j < columns; j++)
+            for (int x = 0; x < columns; x++)
             {
-                GameObject newTileObject = Instantiate(blankTile);
-                Tile tileScript = newTileObject.GetComponent<Tile>();
+                MinesweeperTile newTile;
 
                 // borders should be visible shore tiles
-                if (i == 0 || j == 0 || i == rows - 1 || j == columns - 1)
+                if (y == 0 || x == 0 || y == rows - 1 || x == columns - 1)
                 {
-                    tileScript.Initialize(true, 0, TileContent.Shore);
+                    newTile = boardTileHolder.GetShoreTile();
+                    newTile.Initialize(true, 0, TileContent.Shore);
                 }
                 else
                 {
-                    tileScript.Initialize(false, 0, TileContent.Empty);
+                    newTile = boardTileHolder.GetWaterShadeTile();
+                    newTile.Initialize(false, 0, TileContent.Empty);
                 }
 
-                emptyBoard[i, j] = newTileObject;
+                tilemap.SetTile(new Vector3Int(origin.x + x, origin.y + y, origin.z), newTile);
             }
         }
-
-        return emptyBoard;
     }
 
     private void PopulateBoardItems()
     {
-        PopulateTileContent(TileContent.Boat, numItems.boats);
-        PopulateTileContent(TileContent.Shark, numItems.sharks);
-        PopulateTileContent(TileContent.TreasureSmall, numItems.treasureSmall);
-        PopulateTileContent(TileContent.TreasureMedium, numItems.treasureMedium);
-        PopulateTileContent(TileContent.TreasureLarge, numItems.treasureLarge);
+        PopulateTileContents(TileContent.Boat, numItems.boats);
+        PopulateTileContents(TileContent.Shark, numItems.sharks);
+        PopulateTileContents(TileContent.TreasureSmall, numItems.treasureSmall);
+        PopulateTileContents(TileContent.TreasureMedium, numItems.treasureMedium);
+        PopulateTileContents(TileContent.TreasureLarge, numItems.treasureLarge);
     }
 
-    private void PopulateTileContent(TileContent item, int numItems)
+    private void PopulateTileContents(TileContent item, int numItems)
     {
         int numPopulatedItems = 0;
 
@@ -73,12 +112,12 @@ public class Board : MonoBehaviour
             // pick a random tile
             int randomRow = Random.Range(0, rows);
             int randomColumn = Random.Range(0, columns);
-            Tile randomTileScript = board[randomRow, randomColumn].GetComponent<Tile>();
+            MinesweeperTile randomTile = GetTileByCoords(randomRow, randomColumn); 
 
             // check if the tile is already occupied
-            if (randomTileScript.tileContent == TileContent.Empty)
+            if (randomTile.tileContent == TileContent.Empty)
             {
-                randomTileScript.tileContent = item;
+                randomTile.tileContent = item;
                 numPopulatedItems++;
             }
         }
@@ -90,129 +129,158 @@ public class Board : MonoBehaviour
         {
             for (int j = 0; j < columns; j++)
             {
-                UpdateTileDangerLevel(i, j);
+                // to do: check if I switched x and y haha
+                int dangerLevel = GetTileDangerLevel(i, j);
+                // to do, create this function:
+                // UpdateTileSprite();
             }
         }
     }
 
-    private void UpdateTileDangerLevel(int tileRow, int tileCol)
+    private int GetTileDangerLevel(int tileRow, int tileCol)
     {
         int tileDangerLevel = 0;
 
-        List<GameObject> tileNeighbours = GetTileNeighbours(tileRow, tileCol);
+        List<MinesweeperTile> tileNeighbours = GetTileNeighbours(tileRow, tileCol);
 
-        foreach (GameObject neighbouringTile in tileNeighbours)
+        foreach (MinesweeperTile neighbouringTile in tileNeighbours)
         {
-            if (neighbouringTile.GetComponent<Tile>().tileContent == TileContent.Shark)
+            if (neighbouringTile.tileContent == TileContent.Shark)
             {
                 tileDangerLevel++;
             }
         }
 
-        board[tileRow, tileCol].GetComponent<Tile>().dangerLevel = tileDangerLevel;
+        return tileDangerLevel;
     }
 
-    private List<GameObject> GetTileNeighbours(int ogRow, int ogCol)
+    private List<MinesweeperTile> GetTileNeighbours(int ogRow, int ogCol)
     {
-        List<(int, int)> offsets = new List<(int, int)>
+        Vector3Int ogPosition = new Vector3Int(ogCol, ogRow, 0);
+
+        List<Vector3Int> offsets = new()
         {
-            (-1, -1), (-1, 0), (-1, 1), // top row
-            ( 0, -1),         ( 0, 1),  // middle row
-            ( 1, -1), ( 1, 0), ( 1, 1)  // bottom row
+            new Vector3Int(-1, -1, 0), new Vector3Int(-1, 0, 0), new Vector3Int(-1, 1, 0), // top row
+            new Vector3Int( 0, -1, 0),                           new Vector3Int( 0, 1, 0), // middle row
+            new Vector3Int( 1, -1, 0), new Vector3Int( 1, 0, 0), new Vector3Int( 1, 1, 0)  // bottom row
         };
 
-        List<GameObject> neighbours = new List<GameObject>();
+        List<MinesweeperTile> neighbours = new List<MinesweeperTile>();
 
         foreach (var offset in offsets)
         {
-            int newRow = ogRow + offset.Item1;
-            int newCol = ogCol + offset.Item2;
+            Vector3Int neighbourPosition = ogPosition + offset;
 
-            // ensure new position is inside board
-            if (newRow >= 0 && newRow < rows && newCol >= 0 && newCol < columns)
+            if (tilemap.HasTile(neighbourPosition))
             {
-                neighbours.Add(board[newRow, newCol]);
+                TileBase tile = tilemap.GetTile(neighbourPosition);
+                if (tile is MinesweeperTile minesweeperTile)
+                {
+                    neighbours.Add(minesweeperTile);
+                }
             }
         }
 
         return neighbours;
     }
 
-    private Tile GetTileScriptByCoords(int tileRow, int tileCol)
+    private MinesweeperTile GetTileByCoords(int tileRow, int tileCol)
     {
         if (tileRow < 0 || tileRow >= rows || tileCol < 0 || tileCol >= columns)
         {
             throw new ArgumentOutOfRangeException($"Tile coordinates ({tileRow}, {tileCol}) are out of bounds.");
         }
-        return board[tileRow, tileCol].GetComponent<Tile>();
+
+        Vector3Int tilePosition = new(tileCol, tileRow, 0);
+        TileBase tileAtPosition = tilemap.GetTile(tilePosition);
+
+        if (tileAtPosition is MinesweeperTile minesweeperTile)
+        {
+            return minesweeperTile;
+        }
+
+        throw new ArgumentException("The specified tile is not of type MinesweeperTile");
+
     }
 
-    private (int row, int col) GetTileCoordsByScript(Tile tileScript)
+
+    // returns Vector3Int(-1, -1, -1) if no Tile at coordinate
+    private Vector3Int GetCoordsByTile(MinesweeperTile targetTile)
     {
-        // look for GameObject in board that matches tileScript
-        for (int i = 0; i < rows; i++)
+        BoundsInt bounds = tilemap.cellBounds;
+        for (int x = bounds.xMin; x < bounds.xMax; x++)
         {
-            for (int j = 0; j < columns; j++)
+            for (int y = bounds.yMin; y < bounds.yMax; y++)
             {
-                Tile currentTileScript = board[i, j].GetComponent<Tile>();
-                if (currentTileScript == tileScript)
+                Vector3Int position = new Vector3Int(x, y, 0);
+                TileBase tile = tilemap.GetTile(position);
+
+                // check if tile matches target tile
+                if (tile == targetTile)
                 {
-                    return (i, j);
+                    return position;
                 }
             }
         }
 
-        // if script not found
-        throw new InvalidOperationException("Tile script not found in board.");
+        return new Vector3Int(-1, -1, -1);
     }
 
-    public void RevealTile(GameObject tileGameObject, bool wasClicked)
+    public void RevealTile(MinesweeperTile tile, bool wasClicked)
     {
-        Tile tileScript = tileGameObject.GetComponent<Tile>();
+        // visibly reveal Tile
 
-        if (!tileScript.isRevealed)
+        // update tile sprite
+
+        // to do: decide if we want to use this
+        if (tile.dangerLevel == 0)
         {
-            // visibly reveal Tile
-            tileScript.RevealTile(wasClicked);
+            Vector3Int tileCoords = GetCoordsByTile(tile);
 
-            if (tileScript.dangerLevel == 0)
+            // check for no tile at coordinate
+            if (tileCoords.z != -1)
             {
-                (int tileRow, int tileCol) = GetTileCoordsByScript(tileScript);
-
-                foreach (GameObject neighbourGameObject in GetTileNeighbours(tileRow, tileCol))
+                foreach (MinesweeperTile neighbourTile in GetTileNeighbours(tileCoords.x, tileCoords.y))
                 {
-                    RevealTile(neighbourGameObject, false);
+                    RevealTile(neighbourTile, false);
                 }
             }
         }
+
+        // call functions based on if shark, treasure or boat revealed
     }
 
-    public void PlaceLighthouse(Tile tile, LightHouseType lighthouseType)
+    public void PlaceLighthouse(MinesweeperTile tile, LightHouseType lighthouseType)
     {
         // first update tile content (prevents shark penalty)
         tile.tileContent = TileContent.Lighthouse;
+        // UpdateTileSprite();
 
         // then reveal all the applicable tiles
-        (int lhRow, int lhCol) = GetTileCoordsByScript(tile);
-        foreach (Tile revealTile in GetLighthouseRevealTiles(lighthouseType, lhRow, lhCol)) {
-            revealTile.RevealTile(false);
+        Vector3Int tileCoords = GetCoordsByTile(tile);
+
+        foreach (MinesweeperTile revealTile in GetLighthouseRevealTiles(lighthouseType, tileCoords.x, tileCoords.y))
+        {
+            RevealTile(revealTile, false);
         }
     }
 
-    private List<Tile> GetLighthouseRevealTiles(LightHouseType lighthouseType, int lhRow, int lhCol)
+    private List<MinesweeperTile> GetLighthouseRevealTiles(LightHouseType lighthouseType, int lhRow, int lhCol)
     {
         List<(int, int)> offsets = LightHouse.lightHouseShapeCoordinates[lighthouseType];
-        List<Tile> tilesRevealedByLighthouse = new List<Tile>();
+        List<MinesweeperTile> tilesRevealedByLighthouse = new();
 
         for (int i = 0; i < offsets.Count; i++)
         {
+            // to do: check if I got the y and x correct
             int tileRow = lhRow + offsets[i].Item1;
             int tileCol = lhCol + offsets[i].Item2;
+            Vector3Int tilePosition = new Vector3Int(tileCol, tileRow, 0);
 
             // ensure tile coordinates are inside board
-            if (tileRow >= 0 && tileRow < rows && tileCol >= 0 && tileCol < columns)
+            if (tilemap.HasTile(tilePosition))
             {
-                tilesRevealedByLighthouse.Add(GetTileScriptByCoords(tileRow, tileCol));
+                tilesRevealedByLighthouse.Add(GetTileByCoords(tileRow, tileCol));
             }
         }
 
