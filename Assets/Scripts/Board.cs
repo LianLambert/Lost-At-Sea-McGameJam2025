@@ -31,6 +31,7 @@ public class Board : MonoBehaviour
     private Vector3Int origin => tilemap.origin;
 
     // updating values
+    public bool propagateTiles;
     public GameObject DangerNumberText;
     public GameObject SharkMarkerX;
     public GameObject BoatPrefab;
@@ -351,8 +352,7 @@ public class Board : MonoBehaviour
         {
             case TileContent.Empty:
 
-                // to do: ONE/TWO! uncomment for propagated revealing (danger level 0 only)
-                if (tile.dangerLevel == 0)
+               if (propagateTiles && tile.dangerLevel == 0)
                 {
                     Vector3Int tileCoords = GetCoordsByTile(tile);
 
@@ -383,8 +383,7 @@ public class Board : MonoBehaviour
             case TileContent.TreasureLarge:
                 OnBoatOrTreasureRevealed(tile, TreasurePrefab);
 
-                // to do: TWO/TWO! uncomment for propagated revealing (danger level 0 only)
-                if (tile.dangerLevel == 0)
+                if (propagateTiles && tile.dangerLevel == 0)
                 {
                     Vector3Int tileCoords = GetCoordsByTile(tile);
 
