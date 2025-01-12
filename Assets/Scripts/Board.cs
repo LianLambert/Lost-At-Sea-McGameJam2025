@@ -11,6 +11,7 @@ using Object = UnityEngine.Object;
 
 public class Board : MonoBehaviour
 {
+    // board properties
     public int rows;
     public int columns;
     public Difficulty difficulty;
@@ -25,6 +26,14 @@ public class Board : MonoBehaviour
 
     private TilesHolder boardTileHolder;
     private Vector3Int origin => tilemap.origin;
+
+    // updating values
+    private Dictionary<TileContent, int> treasureValues = new Dictionary<TileContent, int>
+    {
+        { TileContent.TreasureSmall, 10 },
+        { TileContent.TreasureMedium, 20 },
+        { TileContent.TreasureLarge, 50 },
+    };
 
     public void Awake()
     {
@@ -272,7 +281,7 @@ public class Board : MonoBehaviour
         {
             case TileContent.Empty:
 
-                // to do: decide if we want to use this
+                // to do: uncomment for propagated revealing (danger level 0 only)
                 //if (tile.dangerLevel == 0)
                 //{
                 //    Vector3Int tileCoords = GetCoordsByTile(tile);
@@ -284,24 +293,28 @@ public class Board : MonoBehaviour
                 //}
                 break;
             case TileContent.Boat:
-                // to do: implement function!
+                // to do: add animation
+                GameManager.numBoatsCollected++;
                 break;
             case TileContent.Shark:
                 if (wasClicked)
                 {
-                    // to do: implement function
+                    // to do: add animation
+                    GameManager.numLives -= 1;
                 }
                 break;
             case TileContent.TreasureSmall:
             case TileContent.TreasureMedium:
             case TileContent.TreasureLarge:
-                // to do: implement function
+                GameManager.numCoins += treasureValues[tile.tileContent];
+                // to do: add animation
+                tile.tileContent = TileContent.Empty;
+                StartCoroutine(CallUpdateTileSpriteAfterDelay(tile));
                 break;
             // if Lighthouse or Shore, revealing it doesn't do anything
             default:
                 break;
         }
-
     }
 
     public void PlaceLighthouse(MinesweeperTile tile, LightHouseType lighthouseType)
@@ -313,17 +326,30 @@ public class Board : MonoBehaviour
         tile.dangerLevel = 0;
         tile.tileContent = TileContent.Lighthouse;
 
-        // if there was a shark, update neighbouring tile danger levels
-        if (oldTileContent == TileContent.Shark)
+
+        switch (oldTileContent)
         {
-            // update the danger level of the surrounding tiles
-            List<MinesweeperTile> neighbours = GetTileNeighboursByCoord(lighthouseTileCoords.x, lighthouseTileCoords.y);
-            foreach (MinesweeperTile neighbourTile in neighbours)
-            {;
-                Vector3Int neighbourTileCoords = GetCoordsByTile(neighbourTile);
-                neighbourTile.dangerLevel = GetTileDangerLevelByCoord(neighbourTileCoords.x, neighbourTileCoords.y);
-                UpdateTileSprite(neighbourTile);
-            }
+            case TileContent.Shark:
+                // if there was a shark, update neighbouring tile danger levels
+                List<MinesweeperTile> neighbours = GetTileNeighboursByCoord(lighthouseTileCoords.x, lighthouseTileCoords.y);
+                foreach (MinesweeperTile neighbourTile in neighbours)
+                {
+                    ;
+                    Vector3Int neighbourTileCoords = GetCoordsByTile(neighbourTile);
+                    neighbourTile.dangerLevel = GetTileDangerLevelByCoord(neighbourTileCoords.x, neighbourTileCoords.y);
+                    UpdateTileSprite(neighbourTile);
+                }
+                break;
+            case TileContent.Boat:
+                // to do: add animation
+                GameManager.numBoatsCollected++;
+                break;
+            case TileContent.TreasureSmall:
+            case TileContent.TreasureMedium:
+            case TileContent.TreasureLarge:
+                // to do: add animation
+                GameManager.numCoins += treasureValues[oldTileContent];
+                break;
         }
 
         // reveal the tile and update the sprite
@@ -397,6 +423,16 @@ public class Board : MonoBehaviour
         tilemap.RefreshTile(GetCoordsByTile(tile));
     }
 
+    // used for treasure disappearing after reveal
+    private IEnumerator CallUpdateTileSpriteAfterDelay(MinesweeperTile tile)
+    {
+        // Wait for 2 seconds
+        yield return new WaitForSeconds(2f);
+
+        // Call the method
+        UpdateTileSprite(tile);
+    }
+
     private void UpdateSpriteLayers(MinesweeperTile tile)
     {
         var item = tile.tileContent;
@@ -426,7 +462,6 @@ public class Board : MonoBehaviour
                 BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkerTile()));
             if (danger >= 4)
                 BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
-            // TODO Make sure boat water levels reflect danger levels if we agree it looks nice
         }
         else
         {
