@@ -19,6 +19,7 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
         {
             GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
             FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel").SetActive(true);
+            return;
         }
         var r = Random.Range(0, 3);
         string clip = spinForLighthouse;
