@@ -23,7 +23,7 @@ public class Board : MonoBehaviour
     private Tilemap tilemap;
     public Tilemap shadowTileMap;
     public Tilemap BelowTileMap;
-    public Tilemap DangerNumbersTileMap;
+    public Tilemap TileOverlayTextMap;
 
     private TilesHolder boardTileHolder;
     private Vector3Int origin => tilemap.origin;
@@ -526,7 +526,7 @@ public class Board : MonoBehaviour
         }
 
         Vector3Int position = GetCoordsByTile(tile);
-        Vector3 worldPosition = DangerNumbersTileMap.CellToWorld(position);
+        Vector3 worldPosition = TileOverlayTextMap.CellToWorld(position);
 
         // destroy any preexisting text on the tile
         if (tile.dangerNumberText != null)

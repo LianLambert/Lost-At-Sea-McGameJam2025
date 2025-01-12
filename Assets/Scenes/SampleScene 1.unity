@@ -2364,7 +2364,7 @@ GameObject:
   - component: {fileID: 1973156772}
   - component: {fileID: 1973156771}
   m_Layer: 0
-  m_Name: DangerNumbersMap
+  m_Name: TileOverlayTextMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2814,7 +2814,7 @@ MonoBehaviour:
   difficulty: 0
   shadowTileMap: {fileID: 1208897326}
   BelowTileMap: {fileID: 60084253}
-  DangerNumbersTileMap: {fileID: 1973156772}
+  TileOverlayTextMap: {fileID: 1973156772}
   DangerNumberText: {fileID: 5137208287673353722, guid: ff0917275574a4e83b0a04e2a32b5211, type: 3}
   lighthouseCost: 60
 --- !u!1 &2130340336
