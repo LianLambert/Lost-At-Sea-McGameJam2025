@@ -58,7 +58,7 @@ public class Board : MonoBehaviour
     public void Start()
     {
         tilemap.ClearAllTiles();
-                AdjustCamera(rows, columns);
+        ConfigureBoardAndCamera();
 
         GenerateEmptyBoard();
 
@@ -146,14 +146,49 @@ public class Board : MonoBehaviour
         }
     }
 
-    private void AdjustCamera(int width, int height)
+    private void AdjustCamera(Vector3 newPosition, float newSize)
     {
         var camera = Camera.main;
         if (camera != null)
         {
-            camera.transform.position = new Vector3(width / 2f, height / 2f, camera.transform.position.z);
-            camera.orthographicSize = (Mathf.Max(width, height) / 2f);
+            // Update camera position and size
+            camera.transform.position = newPosition;
+            camera.orthographicSize = newSize;
         }
+        else
+        {
+            Debug.LogError("Main Camera not found!");
+        }
+    }
+
+    private void ConfigureBoardAndCamera()
+    {
+        switch (difficulty)
+        {
+            case Difficulty.Easy:
+                rows = 10;
+                columns = 13;
+                AdjustCamera(new Vector3(7.97f, 5.03f, -10), 4.98f);
+                break;
+
+            case Difficulty.Medium:
+                rows = 20;
+                columns = 26;
+                AdjustCamera(new Vector3(15.9f, 9.9f ,-10), 9.97f);
+                break;
+
+            case Difficulty.Hard:
+                rows = 30;
+                columns = 39;
+                AdjustCamera(new Vector3(23.9f, 15, -10), 14.9f);
+                break;
+
+            default:
+                Debug.LogError("Unknown difficulty!");
+                break;
+        }
+
+        Debug.Log($"Board configured for {difficulty} difficulty: Rows={rows}, Columns={columns}");
     }
 
     private void GetTileOnClick()
