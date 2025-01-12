@@ -37,19 +37,19 @@ public class SceneTransitionManager : MonoBehaviour
             //StartCoroutine(FadeIn());
         }
 
-        //if (SceneManager.GetActiveScene().name == "MainMenu")
-        //{
-        //    Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
-        //    Debug.Log("menu music!");
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
+            Debug.Log("menu music!");
 
 
-        //}
+        }
 
-        //if (SceneManager.GetActiveScene().name == "SampleScene 1")
-        //{
-        //    Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
-        //    Debug.Log("level music!");
-        //}
+        if (SceneManager.GetActiveScene().name == "SampleScene 1")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
+            Debug.Log("level music!");
+        }
     }
 
     /// <summary>
