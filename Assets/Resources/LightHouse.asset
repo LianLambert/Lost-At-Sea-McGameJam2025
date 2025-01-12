@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: LightHouse
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: 21300000, guid: 903df90a9ec664325abf0b8ca194b62d, type: 3}
+  - {fileID: 21300000, guid: 72fda59070b3a1a498c6123dd2d6a7ac, type: 3}
   m_MinSpeed: 2
   m_MaxSpeed: 2
   m_AnimationStartTime: 0
@@ -21,5 +21,3 @@ MonoBehaviour:
   m_TileColliderType: 0
   m_TileAnimationFlags: 0
   isRevealed: 0
-  dangerLevelRenderer: {fileID: 0}
-  tileContentRenderer: {fileID: 0}

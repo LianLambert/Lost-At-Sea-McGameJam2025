@@ -77,13 +77,6 @@ public class Board : MonoBehaviour
         {
             RevealTile(clickedTile, true);
         }
-
-        Debug.Log(clickedTile);
-        if (clickedTile != null)
-        {
-            Debug.Log(GetCoordsByTile(clickedTile));
-            PlaceLighthouse(clickedTile, LightHouseType.Basic);
-        }
     }
 
     // adds shore tiles and empty water tiles
@@ -168,18 +161,18 @@ public class Board : MonoBehaviour
             {
                 Vector3Int position = new(x, y, 0);
                 MinesweeperTile tile = (MinesweeperTile)tilemap.GetTile(position);
-                int dangerLevel = GetTileDangerLevel(x, y);
+                int dangerLevel = GetTileDangerLevelByCoord(x, y);
                 tile.dangerLevel = dangerLevel;
                 UpdateTileSprite(tile);
             }
         }
     }
 
-    private int GetTileDangerLevel(int tileXCoord, int tileYCoord)
+    private int GetTileDangerLevelByCoord(int tileXCoord, int tileYCoord)
     {
         int tileDangerLevel = 0;
 
-        List<MinesweeperTile> tileNeighbours = GetTileNeighbours(tileXCoord, tileYCoord);
+        List<MinesweeperTile> tileNeighbours = GetTileNeighboursByCoord(tileXCoord, tileYCoord);
 
         foreach (MinesweeperTile neighbouringTile in tileNeighbours)
         {
@@ -192,7 +185,7 @@ public class Board : MonoBehaviour
         return tileDangerLevel;
     }
 
-    private List<MinesweeperTile> GetTileNeighbours(int tileXCoord, int tileYCoord)
+    private List<MinesweeperTile> GetTileNeighboursByCoord(int tileXCoord, int tileYCoord)
     {
         Vector3Int ogPosition = new Vector3Int(tileXCoord, tileYCoord, 0);
 
@@ -258,7 +251,7 @@ public class Board : MonoBehaviour
                 //{
                 //    Vector3Int tileCoords = GetCoordsByTile(tile);
 
-                //    foreach (MinesweeperTile neighbourTile in GetTileNeighbours(tileCoords.x, tileCoords.y))
+                //    foreach (MinesweeperTile neighbourTile in GetTileNeighboursByCoord(tileCoords.x, tileCoords.y))
                 //    {
                 //        RevealTile(neighbourTile, false);
                 //    }
@@ -288,13 +281,30 @@ public class Board : MonoBehaviour
     public void PlaceLighthouse(MinesweeperTile tile, LightHouseType lighthouseType)
     {
         // first update tile content (prevents shark penalty)
+        Vector3Int lighthouseTileCoords = GetCoordsByTile(tile);
+
+        TileContent oldTileContent = tile.tileContent;
+        tile.dangerLevel = 0;
         tile.tileContent = TileContent.Lighthouse;
-        UpdateTileSprite(tile);
 
-        // then reveal all the applicable tiles
-        Vector3Int tileCoords = GetCoordsByTile(tile);
+        // if there was a shark, update neighbouring tile danger levels
+        if (oldTileContent == TileContent.Shark)
+        {
+            // update the danger level of the surrounding tiles
+            List<MinesweeperTile> neighbours = GetTileNeighboursByCoord(lighthouseTileCoords.x, lighthouseTileCoords.y);
+            foreach (MinesweeperTile neighbourTile in neighbours)
+            {;
+                Vector3Int neighbourTileCoords = GetCoordsByTile(neighbourTile);
+                neighbourTile.dangerLevel = GetTileDangerLevelByCoord(neighbourTileCoords.x, neighbourTileCoords.y);
+                UpdateTileSprite(neighbourTile);
+            }
+        }
 
-        foreach (MinesweeperTile revealTile in GetLighthouseRevealTiles(lighthouseType, tileCoords.x, tileCoords.y))
+        // reveal the tile and update the sprite
+        RevealTile(tile, false);
+
+        // then reveal all other applicable tiles
+        foreach (MinesweeperTile revealTile in GetLighthouseRevealTiles(lighthouseType, lighthouseTileCoords.x, lighthouseTileCoords.y))
         {
             RevealTile(revealTile, false);
         }
@@ -324,8 +334,6 @@ public class Board : MonoBehaviour
 
     private void UpdateTileSprite(MinesweeperTile tile)
     {
-        Debug.Log("Danger level is " + tile.dangerLevel);
-
         if (tile.tileContent == TileContent.Shore)
             return;
 
@@ -336,11 +344,13 @@ public class Board : MonoBehaviour
             return;
         }
 
-       
+        if (tile.dangerLevel == 0)
+        {
+            tile.m_AnimatedSprites = boardTileHolder.GetWaterShadeTile().m_AnimatedSprites;
+        }
         if (tile.dangerLevel == 1)
         {
             tile.m_AnimatedSprites = boardTileHolder.GetWaterMediumTile().m_AnimatedSprites;
-            //tilemap.SetTile(tile);
         }
         if (tile.dangerLevel == 2 || tile.dangerLevel == 3)
             tile.m_AnimatedSprites = boardTileHolder.GetWaterDarkerTile().m_AnimatedSprites;
