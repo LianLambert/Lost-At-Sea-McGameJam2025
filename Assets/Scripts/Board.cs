@@ -41,7 +41,6 @@ public class Board : MonoBehaviour
     public GameObject SharkMarkerX;
     public GameObject BoatPrefab;
     public GameObject TreasurePrefab;
-    public int lighthouseCost = 60;
     private Dictionary<TileContent, int> treasureValues = new Dictionary<TileContent, int>
     {
         { TileContent.TreasureSmall, 10 },
@@ -167,20 +166,20 @@ public class Board : MonoBehaviour
         {
             case Difficulty.Easy:
                 rows = 10;
-                columns = 13;
-                AdjustCamera(new Vector3(7.97f, 5.03f, -10), 4.98f);
+                columns = 14;
+                AdjustCamera(new Vector3(8.83f, 5.03f, -10), 4.98f);
                 break;
 
             case Difficulty.Medium:
                 rows = 20;
-                columns = 26;
-                AdjustCamera(new Vector3(15.9f, 9.9f ,-10), 9.97f);
+                columns = 28;
+                AdjustCamera(new Vector3(17.7f, 10f ,-10), 9.97f);
                 break;
 
             case Difficulty.Hard:
                 rows = 30;
-                columns = 39;
-                AdjustCamera(new Vector3(23.9f, 15, -10), 14.9f);
+                columns = 42;
+                AdjustCamera(new Vector3(26.5f, 15, -10), 14.9f);
                 break;
 
             default:

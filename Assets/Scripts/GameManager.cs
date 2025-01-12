@@ -75,7 +75,7 @@ public class GameManager : MonoBehaviour
                 numCoins = 50;
                 timeRemaining = 300;
                 numBoatGoal = 2;
-                numLightHouses = 3;
+                numLightHouses = 2;
                 break;
 
             case Difficulty.Medium:
@@ -89,7 +89,7 @@ public class GameManager : MonoBehaviour
                 numCoins = 100;
                 timeRemaining = 500;
                 numBoatGoal = 5;
-                numLightHouses = 2;
+                numLightHouses = 5;
                 break;
         }
 

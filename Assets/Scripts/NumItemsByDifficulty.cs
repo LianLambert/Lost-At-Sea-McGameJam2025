@@ -14,7 +14,7 @@ public class NumItemsByDifficulty
     // adjust difficulty settings and treasure settings here
     private static readonly Dictionary<Difficulty, (int numBoats, float sharkPercentage, int numTreasureSmall, int numTreasureMedium, int numTreasureLarge)> itemsByDifficulty = new Dictionary<Difficulty, (int, float, int, int, int)>
     {
-        { Difficulty.Easy, (2, 0.1f, 10, 5, 1) }, // total treasure: 250, 16 squares
+        { Difficulty.Easy, (2, 0.1f, 3, 2, 1) }, // total treasure: 120, 6 squares
         { Difficulty.Medium, (3, 0.2f, 10, 10, 2) }, // total treasure: 400, 22 squares
         { Difficulty.Hard, (5, 0.3f, 10, 15, 4) } // total treasure = 600, 29 squares
     };
