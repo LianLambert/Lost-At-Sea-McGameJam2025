@@ -22,5 +22,3 @@ MonoBehaviour:
   m_TileColliderType: 0
   m_TileAnimationFlags: 0
   isRevealed: 0
-  dangerLevelRenderer: {fileID: 0}
-  tileContentRenderer: {fileID: 0}
