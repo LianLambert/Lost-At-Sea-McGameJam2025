@@ -37,8 +37,6 @@ public class SceneTransitionManager : MonoBehaviour
             //StartCoroutine(FadeIn());
         }
 
-        Debug.Log(SceneManager.GetActiveScene().name);
-
 
         if (SceneManager.GetActiveScene().name == "MainMenu")
         {
@@ -70,7 +68,7 @@ public class SceneTransitionManager : MonoBehaviour
 
         }
 
-        if (sceneName == "SampleScene1")
+        if (sceneName == "SampleScene 1")
         {
             Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
         }
