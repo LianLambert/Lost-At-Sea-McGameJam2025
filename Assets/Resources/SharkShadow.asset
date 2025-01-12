@@ -15,8 +15,14 @@ MonoBehaviour:
   m_AnimatedSprites:
   - {fileID: -1996910294, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
   - {fileID: -1198571951, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
+  - {fileID: -1198571951, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
+  - {fileID: -239813876, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
   - {fileID: -239813876, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
   - {fileID: -1001270726, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
+  - {fileID: -239813876, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
+  - {fileID: -239813876, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
+  - {fileID: -1198571951, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
+  - {fileID: -1198571951, guid: a25b815bb98dd6049a9c3c49d21be94a, type: 3}
   m_MinSpeed: 1
   m_MaxSpeed: 1
   m_AnimationStartTime: 0
@@ -24,3 +30,5 @@ MonoBehaviour:
   m_TileColliderType: 0
   m_TileAnimationFlags: 0
   isRevealed: 0
+  dangerNumberText: {fileID: 0}
+  sharkMarker: {fileID: 0}
