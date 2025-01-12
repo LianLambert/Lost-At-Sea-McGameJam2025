@@ -10,6 +10,7 @@ public class MinesweeperTile : AnimatedTile
 {
     public bool isRevealed;
     public GameObject dangerNumberText;
+    public GameObject sharkMarker;
 
     private int _dangerLevel;
     public int dangerLevel

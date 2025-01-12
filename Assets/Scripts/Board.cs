@@ -9,6 +9,7 @@ using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 using TMPro;
+using UnityEngine.WSA;
 
 public class Board : MonoBehaviour
 {
@@ -23,6 +24,7 @@ public class Board : MonoBehaviour
     private Tilemap tilemap;
     public Tilemap shadowTileMap;
     public Tilemap BelowTileMap;
+    public Tilemap SharkMarkerTileMap;
     public Tilemap DangerNumbersTileMap;
 
     private TilesHolder boardTileHolder;
@@ -30,6 +32,7 @@ public class Board : MonoBehaviour
 
     // updating values
     public GameObject DangerNumberText;
+    public GameObject SharkMarkerX;
     public int lighthouseCost = 60;
     private Dictionary<TileContent, int> treasureValues = new Dictionary<TileContent, int>
     {
@@ -72,6 +75,10 @@ public class Board : MonoBehaviour
         {
             HandleDropAction();
         }
+        else if (Input.GetMouseButtonDown(1))
+        {
+            HandleRightClick();
+        }
 
         //TODO REMOVE THIS
         else if (Input.GetKeyDown(KeyCode.P)) // Detect when the mouse button is released
@@ -99,6 +106,34 @@ public class Board : MonoBehaviour
             GameManager.numLightHouses--;
             GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
             PlaceLighthouse(droppedTile, LightHouseType.Basic);
+        }
+    }
+
+    private void HandleRightClick()
+    {
+        // find the position of the cell
+        Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        worldPosition.z = 0f; // Ensure the z-coordinate is 0 for 2D
+        Vector3Int cellPosition = SharkMarkerTileMap.WorldToCell(worldPosition);
+        Vector3 cellWorldPosition = SharkMarkerTileMap.CellToWorld(cellPosition);
+
+        // Get the tile at the clicked cell position
+        MinesweeperTile tile = tilemap.GetTile(cellPosition) as MinesweeperTile;
+
+        if (tile != null && !tile.isRevealed)
+        {
+            if (tile.sharkMarker)
+            {
+                Destroy(tile.sharkMarker);
+                tile.sharkMarker = null;
+            }
+            else
+            {
+                // create new text at correct location
+                GameObject sharkMarkerObject = Instantiate(SharkMarkerX, cellWorldPosition, Quaternion.identity);
+                sharkMarkerObject.transform.position += new Vector3(0.55f, 0.45f, 0);
+                tile.sharkMarker = sharkMarkerObject;
+            }
         }
     }
 
@@ -446,6 +481,7 @@ public class Board : MonoBehaviour
 
         UpdateSpriteLayers(tile);
         UpdateTileDangerNumber(tile);
+        Destroy(tile.sharkMarker);
         tilemap.RefreshTile(GetCoordsByTile(tile));
     }
 
@@ -521,7 +557,8 @@ public class Board : MonoBehaviour
         // get danger level and position
         int dangerNumber = tile.dangerLevel;
 
-        if (tile.tileContent == TileContent.Shark || dangerNumber == 0) {
+        if (tile.tileContent == TileContent.Shark || dangerNumber == 0)
+        {
             return;
         }
 
@@ -535,20 +572,19 @@ public class Board : MonoBehaviour
         }
 
         // create new text at correct location
-        GameObject dangerNumberPrefab = Instantiate(DangerNumberText, worldPosition, Quaternion.identity);
-        dangerNumberPrefab.transform.position += new Vector3(0.75f, 0.30f, 0);
+        GameObject dangerNumberObject = Instantiate(DangerNumberText, worldPosition, Quaternion.identity);
+        dangerNumberObject.transform.position += new Vector3(0.75f, 0.30f, 0);
 
         // set correct text
-        TextMeshPro textMeshPro = dangerNumberPrefab.GetComponent<TextMeshPro>();
+        TextMeshPro textMeshPro = dangerNumberObject.GetComponent<TextMeshPro>();
 
         if (textMeshPro != null)
         {
             // Set the text to the danger level
             textMeshPro.text = dangerNumber.ToString();
-
         }
 
         // link the text to the tile
-        tile.dangerNumberText = dangerNumberPrefab;
+        tile.dangerNumberText = dangerNumberObject;
     }
 }
