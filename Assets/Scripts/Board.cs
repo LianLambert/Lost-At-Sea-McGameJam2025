@@ -167,13 +167,13 @@ public class Board : MonoBehaviour
             case Difficulty.Easy:
                 rows = 10;
                 columns = 14;
-                AdjustCamera(new Vector3(8.83f, 5.03f, -10), 4.98f);
+                AdjustCamera(new Vector3(8.85f, 5.02f, -10), 4.98f);
                 break;
 
             case Difficulty.Medium:
                 rows = 20;
                 columns = 28;
-                AdjustCamera(new Vector3(17.7f, 10f ,-10), 9.97f);
+                AdjustCamera(new Vector3(17.75f, 10f ,-10), 9.97f);
                 break;
 
             case Difficulty.Hard:
