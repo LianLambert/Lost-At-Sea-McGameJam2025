@@ -54,9 +54,18 @@ public class TilesHolder : MonoBehaviour
     {
         return Resources.Load<MinesweeperTile>("Shark");
     }
+    public MinesweeperTile GetSharkShadow()
+    {
+        return Resources.Load<MinesweeperTile>("SharkShadow");
+    }
 
     public MinesweeperTile GetBoat()
     {
         return Resources.Load<MinesweeperTile>("Boat");
+    }
+
+    public MinesweeperTile GetLightHouse()
+    {
+        return Resources.Load<MinesweeperTile>("LightHouse");
     }
 }

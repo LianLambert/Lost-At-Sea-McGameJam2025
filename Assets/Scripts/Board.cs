@@ -353,6 +353,9 @@ public class Board : MonoBehaviour
         if (tile.tileContent == TileContent.Boat)
             tile.m_AnimatedSprites = boardTileHolder.GetBoat().m_AnimatedSprites;
 
+        if (tile.tileContent == TileContent.Lighthouse)
+            tile.m_AnimatedSprites = boardTileHolder.GetLightHouse().m_AnimatedSprites;
+
         tilemap.RefreshTile(GetCoordsByTile(tile));
     }
 }

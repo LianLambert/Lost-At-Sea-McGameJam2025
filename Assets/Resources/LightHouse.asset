@@ -10,17 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ca0ec7d1e3aa9bb47bc428eb1f6cb3dd, type: 3}
-  m_Name: Boat
+  m_Name: LightHouse
   m_EditorClassIdentifier: 
   m_AnimatedSprites:
-  - {fileID: -59042112, guid: ee229bb4468bb0d4b8ed055fe5c68b5d, type: 3}
-  - {fileID: -618760895, guid: ee229bb4468bb0d4b8ed055fe5c68b5d, type: 3}
-  - {fileID: -1762607410, guid: ee229bb4468bb0d4b8ed055fe5c68b5d, type: 3}
-  - {fileID: 1094647899, guid: ee229bb4468bb0d4b8ed055fe5c68b5d, type: 3}
-  m_MinSpeed: 4
-  m_MaxSpeed: 4
+  - {fileID: 21300000, guid: 903df90a9ec664325abf0b8ca194b62d, type: 3}
+  m_MinSpeed: 2
+  m_MaxSpeed: 2
   m_AnimationStartTime: 0
   m_AnimationStartFrame: 0
   m_TileColliderType: 0
   m_TileAnimationFlags: 0
   isRevealed: 0
+  dangerLevelRenderer: {fileID: 0}
+  tileContentRenderer: {fileID: 0}
