@@ -5,7 +5,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class Tile : TileBase
+[CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/CustomTileObject", order = 1)]
+public class Tile : AnimatedTile
 {
     public bool isRevealed;
 
