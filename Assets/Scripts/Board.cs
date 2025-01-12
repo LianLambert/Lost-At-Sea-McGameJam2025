@@ -105,7 +105,7 @@ public class Board : MonoBehaviour
         if (camera != null)
         {
             camera.transform.position = new Vector3(width / 2f, height / 2f, camera.transform.position.z);
-            camera.orthographicSize = (Mathf.Max(width, height) / 2f) + 1.5f;
+            camera.orthographicSize = (Mathf.Max(width, height) / 2f);
         }
     }
 
