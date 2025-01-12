@@ -39,7 +39,7 @@ public class Board : MonoBehaviour
         PopulateBoardItems();
 
         // update danger levels
-        //UpdateBoardDangerLevels();
+        UpdateBoardDangerLevels();
     }
 
     private void Update()
@@ -66,6 +66,9 @@ public class Board : MonoBehaviour
         {
             RevealTile(clickedTile, true);
         }
+
+        Debug.Log(clickedTile);
+        Debug.Log(GetCoordsByTile(clickedTile));
     }
 
     // adds shore tiles and empty water tiles
@@ -130,9 +133,10 @@ public class Board : MonoBehaviour
             for (int j = 0; j < columns; j++)
             {
                 // to do: check if I switched x and y haha
+                MinesweeperTile tile = GetTileByCoords(i, j);
                 int dangerLevel = GetTileDangerLevel(i, j);
-                // to do, create this function:
-                // UpdateTileSprite();
+                tile.dangerLevel = dangerLevel;
+                UpdateTileSprite();
             }
         }
     }
@@ -229,25 +233,46 @@ public class Board : MonoBehaviour
     public void RevealTile(MinesweeperTile tile, bool wasClicked)
     {
         // visibly reveal Tile
+        tile.isRevealed = true;
 
         // update tile sprite
 
-        // to do: decide if we want to use this
-        if (tile.dangerLevel == 0)
-        {
-            Vector3Int tileCoords = GetCoordsByTile(tile);
-
-            // check for no tile at coordinate
-            if (tileCoords.z != -1)
-            {
-                foreach (MinesweeperTile neighbourTile in GetTileNeighbours(tileCoords.x, tileCoords.y))
-                {
-                    RevealTile(neighbourTile, false);
-                }
-            }
-        }
 
         // call functions based on if shark, treasure or boat revealed
+        switch (tile.tileContent)
+        {
+            case TileContent.Empty:
+
+                // to do: decide if we want to use this
+                //if (tile.dangerLevel == 0)
+                //{
+                //    Vector3Int tileCoords = GetCoordsByTile(tile);
+
+                //    foreach (MinesweeperTile neighbourTile in GetTileNeighbours(tileCoords.x, tileCoords.y))
+                //    {
+                //        RevealTile(neighbourTile, false);
+                //    }
+                //}
+                break;
+            case TileContent.Boat:
+                // to do: implement function!
+                break;
+            case TileContent.Shark:
+                if (wasClicked)
+                {
+                    // to do: implement function
+                }
+                break;
+            case TileContent.TreasureSmall:
+            case TileContent.TreasureMedium:
+            case TileContent.TreasureLarge:
+                // to do: implement function
+                break;
+            // if Lighthouse or Shore, revealing it doesn't do anything
+            default:
+                break;
+        }
+
     }
 
     public void PlaceLighthouse(MinesweeperTile tile, LightHouseType lighthouseType)
@@ -285,5 +310,10 @@ public class Board : MonoBehaviour
         }
 
         return tilesRevealedByLighthouse;
+    }
+
+    private void UpdateTileSprite()
+    {
+        // to do: Mitch is implementing!
     }
 }
