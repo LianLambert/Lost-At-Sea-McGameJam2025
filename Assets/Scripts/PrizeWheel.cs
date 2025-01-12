@@ -10,6 +10,7 @@ public class PrizeWheel : MonoBehaviour
     const string spinForCoins = "SpinCoins";
     const string spinForHeart = "SpinHeart";
     public GameObject prizeWheel;
+    public string lastSpenPrize = "";
 
     private void Awake()
     {
@@ -35,21 +36,21 @@ public class PrizeWheel : MonoBehaviour
 
     public void HidePrizeWheel()
     {
-        //if (SpinWheel.LastSpin == spinForLighthouse)
-        //{
-        //    GameManager.numLightHouses++;
-        //    GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
-        //}
-        //else if (SpinWheel.LastSpin == spinForCoins)
-        //{
-        //    GameManager.numCoins += 50;
-        //    GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
-        //}
-        //else if (SpinWheel.LastSpin == spinForHeart)
-        //{
-        //    GameManager.numLives++;
-        //    GameObject.FindGameObjectWithTag("HeartText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLives.ToString();
-        //}
+        if (lastSpenPrize == spinForLighthouse)
+        {
+            GameManager.numLightHouses++;
+            GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
+        }
+        else if (lastSpenPrize == spinForCoins)
+        {
+            GameManager.numCoins += 50;
+            GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
+        }
+        else if (lastSpenPrize == spinForHeart)
+        {
+            GameManager.numLives++;
+            GameObject.FindGameObjectWithTag("HeartText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLives.ToString();
+        }
 
         Debug.Log("Trying ot hide prizeWheel!");
         prizeWheel.SetActive(false);

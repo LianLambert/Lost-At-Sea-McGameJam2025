@@ -14,16 +14,16 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
 
-        //if (GameManager.numCoins >= -9990)
-        //{
-        //    GameManager.numCoins--;
-        //    GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
-        //}
-        //else
-        //{
-        //    FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel").SetActive(true);
-        //    return;
-        //}
+        if (GameManager.numCoins >= 50)
+        {
+            GameManager.numCoins -= 50;
+            GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
+        }
+        else
+        {
+            FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel").SetActive(true);
+            return;
+        }
 
         var r = Random.Range(0, 3);
         string clip = spinForLighthouse;
@@ -34,6 +34,7 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
         if (r == 2)
             clip = spinForHeart;
 
+        prizeWheel.lastSpenPrize = clip;
         prizeWheelParent.SetActive(true);
         prizeWheel.GetComponent<Animator>().Play(clip);
     }
