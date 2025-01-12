@@ -14,7 +14,7 @@ public class Board : MonoBehaviour
     public int columns;
     public Difficulty difficulty;
     private NumItemsByDifficulty numItems;
-    private HashSet<Vector3Int> usedPositions;
+    private HashSet<Vector3Int> usedPositions = new HashSet<Vector3Int>();
 
     // tilemap fields
     private Tilemap tilemap;
@@ -113,21 +113,21 @@ public class Board : MonoBehaviour
         int numPopulatedItems = 0;
 
         // do not count shore tiles
-        int totalTiles = rows -2 * columns -2;
+        int totalTiles = (rows - 2) * (columns - 2);
 
         while (numPopulatedItems < numItems)
         {
             // pick a random tile (not a shore tile)
-            int randomRow = Random.Range(1, rows-1);
-            int randomColumn = Random.Range(1, columns-1);
-            Vector3Int position = new(randomRow, randomColumn, 0);
+            int randomYCoord = Random.Range(1, rows-1);
+            int randomXCoord = Random.Range(1, columns-1);
+            Vector3Int position = new(randomXCoord, randomYCoord, 0);
 
             if (usedPositions.Contains(position))
             {
                 continue;
             }
 
-            MinesweeperTile randomTile = GetTileByCoords(randomRow, randomColumn);
+            MinesweeperTile randomTile = (MinesweeperTile)tilemap.GetTile(position);
 
             // check if the tile is empty
             if (randomTile.tileContent == TileContent.Empty)
@@ -152,7 +152,8 @@ public class Board : MonoBehaviour
             for (int j = 0; j < columns; j++)
             {
                 // to do: check if I switched x and y haha
-                MinesweeperTile tile = GetTileByCoords(i, j);
+                Vector3Int position = new(j, i, 0);
+                MinesweeperTile tile = (MinesweeperTile)tilemap.GetTile(position);
                 int dangerLevel = GetTileDangerLevel(i, j);
                 tile.dangerLevel = dangerLevel;
                 UpdateTileSprite();
@@ -160,11 +161,11 @@ public class Board : MonoBehaviour
         }
     }
 
-    private int GetTileDangerLevel(int tileRow, int tileCol)
+    private int GetTileDangerLevel(int tileXCoord, int tileYCoord)
     {
         int tileDangerLevel = 0;
 
-        List<MinesweeperTile> tileNeighbours = GetTileNeighbours(tileRow, tileCol);
+        List<MinesweeperTile> tileNeighbours = GetTileNeighbours(tileXCoord, tileYCoord);
 
         foreach (MinesweeperTile neighbouringTile in tileNeighbours)
         {
@@ -177,9 +178,9 @@ public class Board : MonoBehaviour
         return tileDangerLevel;
     }
 
-    private List<MinesweeperTile> GetTileNeighbours(int ogRow, int ogCol)
+    private List<MinesweeperTile> GetTileNeighbours(int tileXCoord, int tileYCoord)
     {
-        Vector3Int ogPosition = new Vector3Int(ogCol, ogRow, 0);
+        Vector3Int ogPosition = new Vector3Int(tileXCoord, tileYCoord, 0);
 
         List<Vector3Int> offsets = new()
         {
@@ -204,26 +205,12 @@ public class Board : MonoBehaviour
         return neighbours;
     }
 
-    private MinesweeperTile GetTileByCoords(int tileRow, int tileCol)
-    {
-        Vector3Int tilePosition = new(tileCol, tileRow, 0);
-
-        if (tilemap.HasTile(tilePosition)) {
-            MinesweeperTile tileAtPosition = tilemap.GetTile(tilePosition) as MinesweeperTile;
-            return tileAtPosition;
-        }
-
-        throw new ArgumentOutOfRangeException("Tile coordinates were out of range in GetTileByCoords");
-    }
-
-
     // returns Vector3Int(-1, -1, -1) if no Tile at coordinate
     private Vector3Int GetCoordsByTile(MinesweeperTile targetTile)
     {
-        BoundsInt bounds = tilemap.cellBounds;
-        for (int x = bounds.xMin; x < bounds.xMax; x++)
+        for (int y = 0; y < rows; y++)
         {
-            for (int y = bounds.yMin; y < bounds.yMax; y++)
+            for (int x = 0; x < columns; x++)
             {
                 Vector3Int position = new Vector3Int(x, y, 0);
                 MinesweeperTile tile = tilemap.GetTile(position) as MinesweeperTile;
@@ -299,7 +286,7 @@ public class Board : MonoBehaviour
         }
     }
 
-    private List<MinesweeperTile> GetLighthouseRevealTiles(LightHouseType lighthouseType, int lhRow, int lhCol)
+    private List<MinesweeperTile> GetLighthouseRevealTiles(LightHouseType lighthouseType, int lhXCoord, int lhYCoord)
     {
         List<(int, int)> offsets = LightHouse.lightHouseShapeCoordinates[lighthouseType];
         List<MinesweeperTile> tilesRevealedByLighthouse = new();
@@ -307,14 +294,14 @@ public class Board : MonoBehaviour
         for (int i = 0; i < offsets.Count; i++)
         {
             // to do: check if I got the y and x correct
-            int tileRow = lhRow + offsets[i].Item1;
-            int tileCol = lhCol + offsets[i].Item2;
-            Vector3Int tilePosition = new Vector3Int(tileCol, tileRow, 0);
+            int tileXCoord = lhXCoord + offsets[i].Item1;
+            int tileYCoord = lhYCoord + offsets[i].Item2;
+            Vector3Int tilePosition = new Vector3Int(tileXCoord, tileYCoord, 0);
 
             // ensure tile coordinates are inside board
             if (tilemap.HasTile(tilePosition))
             {
-                tilesRevealedByLighthouse.Add(GetTileByCoords(tileRow, tileCol));
+                tilesRevealedByLighthouse.Add((MinesweeperTile)tilemap.GetTile(tilePosition));
             }
         }
 
