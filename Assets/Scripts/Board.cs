@@ -14,11 +14,12 @@ public class Board : MonoBehaviour
     public int columns;
     public Difficulty difficulty;
     private NumItemsByDifficulty numItems;
+    private HashSet<Vector3Int> usedPositions;
 
-    // fields below used to create TileMap
+    // tilemap fields
     private Tilemap tilemap;
     private TilesHolder boardTileHolder;
-    private Vector3Int origin;
+    private Vector3Int origin => tilemap.origin;
 
     public void Awake()
     {
@@ -28,8 +29,6 @@ public class Board : MonoBehaviour
 
     public void Start()
     {
-        // origin point for tilemap
-        origin = tilemap.origin;
         tilemap.ClearAllTiles();
 
         GenerateEmptyBoard();
@@ -68,7 +67,10 @@ public class Board : MonoBehaviour
         }
 
         Debug.Log(clickedTile);
-        Debug.Log(GetCoordsByTile(clickedTile));
+        if (clickedTile != null)
+        {
+            Debug.Log(GetCoordsByTile(clickedTile));
+        }
     }
 
     // adds shore tiles and empty water tiles
@@ -110,18 +112,35 @@ public class Board : MonoBehaviour
     {
         int numPopulatedItems = 0;
 
+        // do not count shore tiles
+        int totalTiles = rows -2 * columns -2;
+
         while (numPopulatedItems < numItems)
         {
-            // pick a random tile
-            int randomRow = Random.Range(0, rows);
-            int randomColumn = Random.Range(0, columns);
-            MinesweeperTile randomTile = GetTileByCoords(randomRow, randomColumn); 
+            // pick a random tile (not a shore tile)
+            int randomRow = Random.Range(1, rows-1);
+            int randomColumn = Random.Range(1, columns-1);
+            Vector3Int position = new(randomRow, randomColumn, 0);
 
-            // check if the tile is already occupied
+            if (usedPositions.Contains(position))
+            {
+                continue;
+            }
+
+            MinesweeperTile randomTile = GetTileByCoords(randomRow, randomColumn);
+
+            // check if the tile is empty
             if (randomTile.tileContent == TileContent.Empty)
             {
                 randomTile.tileContent = item;
+                usedPositions.Add(position);
                 numPopulatedItems++;
+
+                // if all positions are used, throw an exception or stop
+                if (usedPositions.Count >= totalTiles)
+                {
+                    throw new InvalidOperationException("All available positions are occupied, can't populate more items.");
+                }
             }
         }
     }
@@ -187,15 +206,14 @@ public class Board : MonoBehaviour
 
     private MinesweeperTile GetTileByCoords(int tileRow, int tileCol)
     {
-        if (tileRow < 0 || tileRow >= rows || tileCol < 0 || tileCol >= columns)
-        {
-            throw new ArgumentOutOfRangeException($"Tile coordinates ({tileRow}, {tileCol}) are out of bounds.");
+        Vector3Int tilePosition = new(tileCol, tileRow, 0);
+
+        if (tilemap.HasTile(tilePosition)) {
+            MinesweeperTile tileAtPosition = tilemap.GetTile(tilePosition) as MinesweeperTile;
+            return tileAtPosition;
         }
 
-        Vector3Int tilePosition = new(tileCol, tileRow, 0);
-        MinesweeperTile tileAtPosition = tilemap.GetTile(tilePosition) as MinesweeperTile;
-        return tileAtPosition;
-
+        throw new ArgumentOutOfRangeException("Tile coordinates were out of range in GetTileByCoords");
     }
 
 
