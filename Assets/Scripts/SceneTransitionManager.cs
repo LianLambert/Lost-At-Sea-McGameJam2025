@@ -60,6 +60,12 @@ public class SceneTransitionManager : MonoBehaviour
             GameManager.difficulty = Difficulty.Hard;
     }
 
+    public void ReloadCurrentScene()
+    {
+        GameManager.gameIsOver = false;
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     /// <summary>
     /// Coroutine to handle scene transition with fade-out and fade-in.
     /// </summary>
