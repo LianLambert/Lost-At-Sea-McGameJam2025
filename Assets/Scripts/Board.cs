@@ -8,6 +8,7 @@ using static UnityEngine.UI.Image;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
+using TMPro;
 
 public class Board : MonoBehaviour
 {
@@ -21,13 +22,15 @@ public class Board : MonoBehaviour
     // tilemap fields
     private Tilemap tilemap;
     public Tilemap shadowTileMap;
-    public Tilemap BelowTitleMap;
-
+    public Tilemap BelowTileMap;
+    public Tilemap DangerNumbersTileMap;
 
     private TilesHolder boardTileHolder;
     private Vector3Int origin => tilemap.origin;
 
     // updating values
+    public GameObject DangerNumberText;
+    public int lighthouseCost = 60;
     private Dictionary<TileContent, int> treasureValues = new Dictionary<TileContent, int>
     {
         { TileContent.TreasureSmall, 10 },
@@ -333,6 +336,11 @@ public class Board : MonoBehaviour
 
     public void PlaceLighthouse(MinesweeperTile tile, LightHouseType lighthouseType)
     {
+        if (tile.tileContent == TileContent.Shore)
+        {
+            return;
+        }
+
         // first update tile content (prevents shark penalty)
         Vector3Int lighthouseTileCoords = GetCoordsByTile(tile);
 
@@ -437,6 +445,7 @@ public class Board : MonoBehaviour
             tile.m_AnimatedSprites = boardTileHolder.GetCoin().m_AnimatedSprites;
 
         UpdateSpriteLayers(tile);
+        UpdateTileDangerNumber(tile);
         tilemap.RefreshTile(GetCoordsByTile(tile));
     }
 
@@ -463,7 +472,7 @@ public class Board : MonoBehaviour
             shadowTile.m_MaxSpeed = 6;
             shadowTile.m_MinSpeed = 6;
             shadowTileMap.SetTile(position, shadowTile);
-            BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
+            BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
         }
         else if (item == TileContent.Boat)
         {
@@ -472,38 +481,74 @@ public class Board : MonoBehaviour
             shadowTileMap.SetTile(position, null);
             var danger = GetTileDangerLevelByCoord(position.x, position.y);
             if (danger == 0)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
             if (danger == 1 || danger == 2)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterMediumTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterMediumTile()));
             if (danger == 3)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkerTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkerTile()));
             if (danger >= 4)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
             // TODO Make sure boat water levels reflect danger levels if we agree it looks nice
         }else if (item == TileContent.Lighthouse)
         {
-            BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
+            BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
         }else if (item == TileContent.TreasureSmall || item == TileContent.TreasureMedium || item == TileContent.TreasureLarge)
         {
             shadowTileMap.SetTile(position, null);
 
             var danger = GetTileDangerLevelByCoord(position.x, position.y);
             if (danger == 0)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
             if (danger == 1 || danger == 2)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterMediumTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterMediumTile()));
             if (danger == 3)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkerTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkerTile()));
             if (danger >= 4)
-                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
+                BelowTileMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
         }
         else
         {
             tile.m_MaxSpeed = 2;
             tile.m_MinSpeed = 2;
             shadowTileMap.SetTile(position, null);
-            BelowTitleMap.SetTile(position, null);
+            BelowTileMap.SetTile(position, null);
         }
 
+    }
+
+    private void UpdateTileDangerNumber(MinesweeperTile tile)
+    {
+        // get danger level and position
+        int dangerNumber = tile.dangerLevel;
+
+        if (tile.tileContent == TileContent.Shark || dangerNumber == 0) {
+            return;
+        }
+
+        Vector3Int position = GetCoordsByTile(tile);
+        Vector3 worldPosition = DangerNumbersTileMap.CellToWorld(position);
+
+        // destroy any preexisting text on the tile
+        if (tile.dangerNumberText != null)
+        {
+            Destroy(tile.dangerNumberText);
+        }
+
+        // create new text at correct location
+        GameObject dangerNumberPrefab = Instantiate(DangerNumberText, worldPosition, Quaternion.identity);
+        dangerNumberPrefab.transform.position += new Vector3(0.75f, 0.30f, 0);
+
+        // set correct text
+        TextMeshPro textMeshPro = dangerNumberPrefab.GetComponent<TextMeshPro>();
+
+        if (textMeshPro != null)
+        {
+            // Set the text to the danger level
+            textMeshPro.text = dangerNumber.ToString();
+
+        }
+
+        // link the text to the tile
+        tile.dangerNumberText = dangerNumberPrefab;
     }
 }
