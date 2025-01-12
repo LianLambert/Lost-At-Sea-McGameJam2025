@@ -33,6 +33,8 @@ public class Board : MonoBehaviour
     // updating values
     public GameObject DangerNumberText;
     public GameObject SharkMarkerX;
+    public GameObject BoatPrefab;
+    public GameObject TreasurePrefab;
     public int lighthouseCost = 60;
     private Dictionary<TileContent, int> treasureValues = new Dictionary<TileContent, int>
     {
@@ -364,7 +366,7 @@ public class Board : MonoBehaviour
                 }
                 break;
             case TileContent.Boat:
-                // to do: add animation
+                OnBoatOrTreasureRevealed(tile, BoatPrefab);
                 GameManager.numBoatsCollected++;
                 break;
             case TileContent.Shark:
@@ -379,6 +381,8 @@ public class Board : MonoBehaviour
             case TileContent.TreasureSmall:
             case TileContent.TreasureMedium:
             case TileContent.TreasureLarge:
+                OnBoatOrTreasureRevealed(tile, TreasurePrefab);
+
                 // to do: TWO/TWO! uncomment for propagated revealing (danger level 0 only)
                 if (tile.dangerLevel == 0)
                 {
@@ -426,25 +430,24 @@ public class Board : MonoBehaviour
                 List<MinesweeperTile> neighbours = GetTileNeighboursByCoord(lighthouseTileCoords.x, lighthouseTileCoords.y);
                 foreach (MinesweeperTile neighbourTile in neighbours)
                 {
-                    ;
                     Vector3Int neighbourTileCoords = GetCoordsByTile(neighbourTile);
                     neighbourTile.dangerLevel = GetTileDangerLevelByCoord(neighbourTileCoords.x, neighbourTileCoords.y);
                     UpdateTileSprite(neighbourTile);
                 }
                 break;
             case TileContent.Boat:
-                // to do: add animation
                 Debug.Log("Lighthouse placed ON boat");
 
                 if (TryMoveBoatToHiddenAndEmptySquare(tile))
                     break;
 
                 GameManager.numBoatsCollected++;
+                OnBoatOrTreasureRevealed(tile, BoatPrefab);
                 break;
             case TileContent.TreasureSmall:
             case TileContent.TreasureMedium:
             case TileContent.TreasureLarge:
-                // to do: add animation
+                OnBoatOrTreasureRevealed(tile, TreasurePrefab);
                 GameManager.numCoins += treasureValues[oldTileContent];
                 break;
         }
@@ -650,6 +653,7 @@ public class Board : MonoBehaviour
 
         // create new text at correct location
         GameObject dangerNumberObject = Instantiate(DangerNumberText, worldPosition, Quaternion.identity);
+        dangerNumberObject.transform.SetParent(DangerNumbersTileMap.transform);
         dangerNumberObject.transform.position += new Vector3(0.75f, 0.30f, 0);
 
         // set correct text
@@ -663,5 +667,13 @@ public class Board : MonoBehaviour
 
         // link the text to the tile
         tile.dangerNumberText = dangerNumberObject;
+    }
+
+    private void OnBoatOrTreasureRevealed(MinesweeperTile tile, GameObject itemPrefab)
+    {
+        // to do: uncomment if we want this
+        //Vector3Int cellPosition = GetCoordsByTile(tile);
+        //Vector3 worldPosition = tilemap.CellToWorld(cellPosition);
+        //Instantiate(itemPrefab, worldPosition, Quaternion.identity);
     }
 }
