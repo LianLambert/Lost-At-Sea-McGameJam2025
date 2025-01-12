@@ -77,6 +77,13 @@ public class Board : MonoBehaviour
         {
             RevealTile(clickedTile, true);
         }
+
+        Debug.Log(clickedTile);
+        if (clickedTile != null)
+        {
+            Debug.Log(GetCoordsByTile(clickedTile));
+            PlaceLighthouse(clickedTile, LightHouseType.Basic);
+        }
     }
 
     // adds shore tiles and empty water tiles
@@ -139,8 +146,10 @@ public class Board : MonoBehaviour
             if (randomTile.tileContent == TileContent.Empty)
             {
                 randomTile.tileContent = item;
+                randomTile.isRevealed = false;
                 usedPositions.Add(position);
                 numPopulatedItems++;
+                tilemap.SetTile(position, randomTile);
 
                 // if all positions are used, throw an exception or stop
                 if (usedPositions.Count >= totalTiles)
@@ -161,7 +170,7 @@ public class Board : MonoBehaviour
                 MinesweeperTile tile = (MinesweeperTile)tilemap.GetTile(position);
                 int dangerLevel = GetTileDangerLevel(x, y);
                 tile.dangerLevel = dangerLevel;
-                UpdateTileSprite();
+                UpdateTileSprite(tile);
             }
         }
     }
@@ -237,7 +246,7 @@ public class Board : MonoBehaviour
         tile.isRevealed = true;
 
         // update tile sprite
-
+        UpdateTileSprite(tile);
 
         // call functions based on if shark, treasure or boat revealed
         switch (tile.tileContent)
@@ -280,7 +289,7 @@ public class Board : MonoBehaviour
     {
         // first update tile content (prevents shark penalty)
         tile.tileContent = TileContent.Lighthouse;
-        // UpdateTileSprite();
+        UpdateTileSprite(tile);
 
         // then reveal all the applicable tiles
         Vector3Int tileCoords = GetCoordsByTile(tile);
@@ -313,8 +322,37 @@ public class Board : MonoBehaviour
         return tilesRevealedByLighthouse;
     }
 
-    private void UpdateTileSprite()
+    private void UpdateTileSprite(MinesweeperTile tile)
     {
-        // to do: Mitch is implementing!
+        Debug.Log("Danger level is " + tile.dangerLevel);
+
+        if (tile.tileContent == TileContent.Shore)
+            return;
+
+        if (!tile.isRevealed)
+        {
+            tile.m_AnimatedSprites = Object.Instantiate<MinesweeperTile>(boardTileHolder.GetBlackTile()).m_AnimatedSprites;
+            tilemap.RefreshTile(GetCoordsByTile(tile));
+            return;
+        }
+
+       
+        if (tile.dangerLevel == 1)
+        {
+            tile.m_AnimatedSprites = boardTileHolder.GetWaterMediumTile().m_AnimatedSprites;
+            //tilemap.SetTile(tile);
+        }
+        if (tile.dangerLevel == 2 || tile.dangerLevel == 3)
+            tile.m_AnimatedSprites = boardTileHolder.GetWaterDarkerTile().m_AnimatedSprites;
+        if (tile.dangerLevel >= 4)
+            tile.m_AnimatedSprites = boardTileHolder.GetWaterDarkestTile().m_AnimatedSprites;
+
+        if (tile.tileContent == TileContent.Shark)
+            tile.m_AnimatedSprites = boardTileHolder.GetShark().m_AnimatedSprites;
+
+        if (tile.tileContent == TileContent.Boat)
+            tile.m_AnimatedSprites = boardTileHolder.GetBoat().m_AnimatedSprites;
+
+        tilemap.RefreshTile(GetCoordsByTile(tile));
     }
 }
