@@ -15,6 +15,7 @@ TagManager:
   - PrizeWheel
   - fadeIn
   - board
+  - SceneManager
   layers:
   - Default
   - TransparentFX
