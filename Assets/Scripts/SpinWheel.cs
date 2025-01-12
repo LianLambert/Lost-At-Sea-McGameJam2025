@@ -21,6 +21,7 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
         }
         else
         {
+            GameManager.numCoins = 0;
             FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel").SetActive(true);
             return;
         }

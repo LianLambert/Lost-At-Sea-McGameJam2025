@@ -31,7 +31,12 @@ public class Board : MonoBehaviour
     private Vector3Int origin => tilemap.origin;
 
     // updating values
-    public bool propagateTiles;
+    public void SetPropogate(bool val)
+    {
+        propagateTiles = val;
+    }
+
+    private bool propagateTiles = true;
     public GameObject DangerNumberText;
     public GameObject SharkMarkerX;
     public GameObject BoatPrefab;
