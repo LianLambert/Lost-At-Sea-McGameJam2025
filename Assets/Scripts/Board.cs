@@ -277,9 +277,9 @@ public class Board : MonoBehaviour
 
         List<Vector3Int> offsets = new()
         {
-            new Vector3Int(-1, -1, 0), new Vector3Int(-1, 0, 0), new Vector3Int(-1, 1, 0), // top row
-            new Vector3Int( 0, -1, 0),                           new Vector3Int( 0, 1, 0), // middle row
-            new Vector3Int( 1, -1, 0), new Vector3Int( 1, 0, 0), new Vector3Int( 1, 1, 0)  // bottom row
+            new Vector3Int(-1, 1, 0), new Vector3Int(0, 1, 0), new Vector3Int(1, 1, 0), // top row
+            new Vector3Int( -1, 0, 0),                           new Vector3Int( 1, 0, 0), // middle row
+            new Vector3Int( -1, -1, 0), new Vector3Int( 0, -1, 0), new Vector3Int( 1, -1, 0)  // bottom row
         };
 
         List<MinesweeperTile> neighbours = new List<MinesweeperTile>();
@@ -333,15 +333,18 @@ public class Board : MonoBehaviour
             case TileContent.Empty:
 
                 // to do: uncomment for propagated revealing (danger level 0 only)
-                //if (tile.dangerLevel == 0)
-                //{
-                //    Vector3Int tileCoords = GetCoordsByTile(tile);
+                if (tile.dangerLevel == 0)
+                {
+                    Vector3Int tileCoords = GetCoordsByTile(tile);
 
-                //    foreach (MinesweeperTile neighbourTile in GetTileNeighboursByCoord(tileCoords.x, tileCoords.y))
-                //    {
-                //        RevealTile(neighbourTile, false);
-                //    }
-                //}
+                    foreach (MinesweeperTile neighbourTile in GetTileNeighboursByCoord(tileCoords.x, tileCoords.y))
+                    {
+                        if (!neighbourTile.isRevealed)
+                        {
+                            StartCoroutine(CallRevealTileAfterDelay(neighbourTile, false));
+                        }
+                    }
+                }
                 break;
             case TileContent.Boat:
                 // to do: add animation
@@ -493,6 +496,16 @@ public class Board : MonoBehaviour
 
         // Call the method
         UpdateTileSprite(tile);
+    }
+
+    // used to make "Fast mode" slower ahahahah
+    private IEnumerator CallRevealTileAfterDelay(MinesweeperTile tile, bool wasClicked)
+    {
+        // Wait for 2 seconds
+        yield return new WaitForSeconds(0.15f);
+
+        // Call the method
+        RevealTile(tile, wasClicked);
     }
 
     private void UpdateSpriteLayers(MinesweeperTile tile)
