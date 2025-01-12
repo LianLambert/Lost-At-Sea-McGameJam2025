@@ -12,6 +12,8 @@ public class AudioManager : MonoBehaviour
     private Dictionary<string, AudioClip> audioClips = new Dictionary<string, AudioClip>();
     private Dictionary<string, AudioClip> musicClips = new Dictionary<string, AudioClip>();
 
+    private HashSet<string> playingSounds = new HashSet<string>();
+
     private void Awake()
     {
         audioSource = gameObject.AddComponent<AudioSource>();
@@ -49,7 +51,11 @@ public class AudioManager : MonoBehaviour
     {
         if (audioClips.TryGetValue(clipName, out AudioClip clip))
         {
+            if (playingSounds.Contains(clipName)) return;
+
             audioSource.PlayOneShot(clip);
+            playingSounds.Add(clipName);
+
         }
 
     }
@@ -58,8 +64,22 @@ public class AudioManager : MonoBehaviour
     {
         if (audioClips.TryGetValue(clipName, out AudioClip clip))
         {
+            if (playingSounds.Contains(clipName)) return;
+
             audioSource.PlayOneShot(clip, volume);
+            playingSounds.Add(clipName);
+
+            // Remove clip from list of playing clips
+            StartCoroutine(RemoveFromPlayingSounds(clipName, clip.length));
+
+
         }
+    }
+
+    private IEnumerator RemoveFromPlayingSounds(string clipName, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        playingSounds.Remove(clipName);
     }
 
     public void PlayMusic(string clipName)

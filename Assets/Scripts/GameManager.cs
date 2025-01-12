@@ -52,6 +52,7 @@ public class GameManager : MonoBehaviour
 
     public static int numCoins;
     public static int timeRemaining;
+    public static int timeElapsed;
     public static int numTilesRevealed;
     public static int numBoatGoal;
     public static Difficulty difficulty;
@@ -86,6 +87,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
+        timeElapsed = 0;
         numBoatsCollected = 0;
         numLives = 3;
         numTilesRevealed = 0;
@@ -120,6 +122,7 @@ public class GameManager : MonoBehaviour
         if (WinPanel != null)
         {
             WinPanel.SetActive(true);
+            Camera.main.GetComponent<AudioManager>().PlaySound("EndOfGame - Lose");
         }
         else
         {
@@ -144,6 +147,8 @@ public class GameManager : MonoBehaviour
         if (WinPanel != null)
         {
             WinPanel.SetActive(true);
+            Camera.main.GetComponent<AudioManager>().PlaySound("EndOfGame - Win");
+
         }
         else
         {
@@ -169,6 +174,66 @@ public class GameManager : MonoBehaviour
         }
         GameObject.FindGameObjectWithTag("NumTimeLeft").GetComponent<TextMeshProUGUI>().text = FormatTime(timeRemaining);
         timeRemaining--;
+        timeElapsed++;
+
+        if(timeElapsed % 50 == 0 && timeRemaining > 0)
+        {
+            if (difficulty == Difficulty.Easy)
+            {
+                if (timeRemaining > 150)
+                {
+                   Camera.main.GetComponent<AudioManager>().PlaySound("TimerChill");
+                }
+
+                else if (timeRemaining > 50)
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerMedium");
+                }
+
+                else
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerUrgent");
+                }
+            }
+
+            else if (difficulty == Difficulty.Medium)
+            {
+                if (timeRemaining > 200)
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerChill");
+                }
+
+                else if (timeRemaining > 50)
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerMedium");
+                }
+
+                else
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerUrgent");
+                }
+            }
+
+            else if (difficulty == Difficulty.Hard)
+            {
+                if (timeRemaining > 200)
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerChill");
+                }
+
+                else if (timeRemaining > 50)
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerMedium");
+                }
+
+                else
+                {
+                    Camera.main.GetComponent<AudioManager>().PlaySound("TimerUrgent");
+                }
+            }
+        }
+        
+
         Invoke("TimerCountdown", 1f);
 
 
