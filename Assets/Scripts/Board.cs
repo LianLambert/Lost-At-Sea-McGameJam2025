@@ -153,14 +153,13 @@ public class Board : MonoBehaviour
 
     private void UpdateBoardDangerLevels()
     {
-        for (int i = 0; i < rows; i++)
+        for (int y = 0; y < rows; y++)
         {
-            for (int j = 0; j < columns; j++)
+            for (int x = 0; x < columns; x++)
             {
-                // to do: check if I switched x and y haha
-                Vector3Int position = new(j, i, 0);
+                Vector3Int position = new(x, y, 0);
                 MinesweeperTile tile = (MinesweeperTile)tilemap.GetTile(position);
-                int dangerLevel = GetTileDangerLevel(i, j);
+                int dangerLevel = GetTileDangerLevel(x, y);
                 tile.dangerLevel = dangerLevel;
                 UpdateTileSprite();
             }
