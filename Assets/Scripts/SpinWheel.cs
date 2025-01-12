@@ -26,6 +26,8 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
             return;
         }
 
+        Camera.main.GetComponent<AudioManager>().PlaySound("GachaRoll");
+
         var r = Random.Range(0, 3);
         string clip = spinForLighthouse;
         if (r == 0)
