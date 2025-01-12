@@ -97,7 +97,7 @@ public class Board : MonoBehaviour
                 // borders should be visible shore tiles
                 if (y == 0 || x == 0 || y == rows - 1 || x == columns - 1)
                 {
-                    newTile = boardTileHolder.GetShoreTile();
+                    newTile = Object.Instantiate<MinesweeperTile>(boardTileHolder.GetShoreTile());
                     newTile.Initialize(true, 0, TileContent.Shore);
                 }
                 else
