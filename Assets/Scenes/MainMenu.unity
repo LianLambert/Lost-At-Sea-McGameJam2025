@@ -133,8 +133,8 @@ GameObject:
   - component: {fileID: 109607293}
   - component: {fileID: 109607292}
   m_Layer: 0
-  m_Name: SceneTransitionManager
-  m_TagString: Untagged
+  m_Name: SceneTransitionManage2
+  m_TagString: SceneManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -332,6 +332,7 @@ GameObject:
   - component: {fileID: 225475383}
   - component: {fileID: 225475382}
   - component: {fileID: 225475381}
+  - component: {fileID: 225475384}
   m_Layer: 5
   m_Name: Medium_Panel
   m_TagString: Untagged
@@ -403,10 +404,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 109607292}
-        m_TargetAssemblyTypeName: SceneTransitionManager, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 225475384}
+        m_TargetAssemblyTypeName: CustomLoadScene, Assembly-CSharp
+        m_MethodName: LoadSAMPLESCENEdirtty
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -465,6 +466,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 225475379}
   m_CullTransparentMesh: 1
+--- !u!114 &225475384
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 225475379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593f7771836874005b083747f4cca9ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &253896678
 GameObject:
   m_ObjectHideFlags: 0
@@ -2429,6 +2442,7 @@ GameObject:
   - component: {fileID: 1457228548}
   - component: {fileID: 1457228547}
   - component: {fileID: 1457228546}
+  - component: {fileID: 1457228549}
   m_Layer: 5
   m_Name: Hard_Panel
   m_TagString: Untagged
@@ -2500,10 +2514,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 109607292}
-        m_TargetAssemblyTypeName: SceneTransitionManager, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 225475384}
+        m_TargetAssemblyTypeName: CustomLoadScene, Assembly-CSharp
+        m_MethodName: LoadSAMPLESCENEdirtty
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -2562,6 +2576,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457228544}
   m_CullTransparentMesh: 1
+--- !u!114 &1457228549
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1457228544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593f7771836874005b083747f4cca9ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1514713949
 GameObject:
   m_ObjectHideFlags: 0
@@ -3091,6 +3117,7 @@ GameObject:
   - component: {fileID: 1588949026}
   - component: {fileID: 1588949025}
   - component: {fileID: 1588949027}
+  - component: {fileID: 1588949028}
   m_Layer: 5
   m_Name: Easy_Panel
   m_TagString: Untagged
@@ -3200,10 +3227,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 109607292}
-        m_TargetAssemblyTypeName: SceneTransitionManager, Assembly-CSharp
-        m_MethodName: LoadScene
-        m_Mode: 5
+      - m_Target: {fileID: 1588949028}
+        m_TargetAssemblyTypeName: CustomLoadScene, Assembly-CSharp
+        m_MethodName: LoadSAMPLESCENEdirtty
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3224,6 +3251,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1588949028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1588949023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 593f7771836874005b083747f4cca9ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1606800851
 GameObject:
   m_ObjectHideFlags: 0
