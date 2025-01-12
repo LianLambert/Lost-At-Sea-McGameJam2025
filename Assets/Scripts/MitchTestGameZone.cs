@@ -33,7 +33,7 @@ public class GameZone : MonoBehaviour
                 // Determine which tile to use based on the grid position
                 int tileIndex = (x + y) % 3; // Cycles through 0, 1, 2
 
-                Tile tile = null;
+                MinesweeperTile tile = null;
                 var r = Random.Range(0, 5);
 
 
@@ -101,7 +101,7 @@ public class GameZone : MonoBehaviour
         Vector3Int cellPosition = _gameZoneTilemap.WorldToCell(worldPosition);
 
         // Get the tile at the clicked cell position
-        Tile clickedTile = _gameZoneTilemap.GetTile(cellPosition) as Tile;
+        var clickedTile = _gameZoneTilemap.GetTile(cellPosition) as MinesweeperTile;
 
         if (clickedTile != null)
         {

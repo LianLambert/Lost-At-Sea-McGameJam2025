@@ -7,6 +7,7 @@ using UnityEngine.Tilemaps;
 using static UnityEngine.UI.Image;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine.UIElements;
+using Object = UnityEngine.Object;
 
 public class Board : MonoBehaviour
 {
@@ -39,6 +40,7 @@ public class Board : MonoBehaviour
 
         // update danger levels
         UpdateBoardDangerLevels();
+        AdjustCamera(rows, columns);
     }
 
     private void Update()
@@ -46,6 +48,16 @@ public class Board : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             GetTileOnClick();
+        }
+    }
+
+    private void AdjustCamera(int width, int height)
+    {
+        var camera = Camera.main;
+        if (camera != null)
+        {
+            camera.transform.position = new Vector3(width / 2f, height / 2f, camera.transform.position.z);
+            camera.orthographicSize = Mathf.Max(width, height) / 2f;
         }
     }
 
@@ -90,7 +102,7 @@ public class Board : MonoBehaviour
                 }
                 else
                 {
-                    newTile = boardTileHolder.GetWaterShadeTile();
+                    newTile = Object.Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile());
                     newTile.Initialize(false, 0, TileContent.Empty);
                 }
 
