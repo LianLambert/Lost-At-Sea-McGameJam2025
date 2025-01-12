@@ -53,6 +53,28 @@ public class Board : MonoBehaviour
         {
             GetTileOnClick();
         }
+        else if (Input.GetMouseButtonUp(0)) // Detect when the mouse button is released
+        {
+            HandleDropAction();
+        }
+    }
+
+    private void HandleDropAction()
+    {
+        if (DragAndDropLightHouse.isDragging)
+        {
+            // Get the position of the mouse in world space
+            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            worldPosition.z = 0f; // Ensure the z-coordinate is 0 for 2D
+
+            // Convert the world position to a cell position
+            Vector3Int cellPosition = tilemap.WorldToCell(worldPosition);
+            MinesweeperTile droppedTile = tilemap.GetTile(cellPosition) as MinesweeperTile;
+
+            Destroy(FindObjectOfType<DragAndDropLightHouse>().currentPrefab);
+            DragAndDropLightHouse.isDragging = false;
+            PlaceLighthouse(droppedTile, LightHouseType.Basic);
+        }
     }
 
     private void AdjustCamera(int width, int height)

@@ -4,8 +4,8 @@ using UnityEngine.EventSystems;
 public class DragAndDropLightHouse : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
     public GameObject prefab;
-    private GameObject currentPrefab;
-    private bool isDragging = false;
+    public  GameObject currentPrefab;
+    public static bool isDragging = false;
     private Camera mainCamera;
 
     void Start()
@@ -43,10 +43,6 @@ public class DragAndDropLightHouse : MonoBehaviour, IPointerDownHandler, IDragHa
 
     public void OnPointerUp(PointerEventData eventData)
     {
-        if (isDragging && currentPrefab != null)
-        {
-            isDragging = false;
-            Destroy(currentPrefab); 
-        }
+        
     }
 }
