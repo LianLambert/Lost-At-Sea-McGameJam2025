@@ -3,43 +3,50 @@ using UnityEngine.Tilemaps;
 
 public class TilesHolder : MonoBehaviour
 {
-    private Tile water_shade;
-    private Tile water_medium;
-    private Tile water_darker;
-    private Tile water_darkest;
-    private Tile black_tile;
+    private MinesweeperTile water_shade;
+    private MinesweeperTile water_medium;
+    private MinesweeperTile water_darker;
+    private MinesweeperTile water_darkest;
+    private MinesweeperTile black_tile;
+    private MinesweeperTile shore_tile;
 
     private void Awake()
     {
-        water_shade = Resources.Load<Tile>("Water_Shade");
-        water_medium = Resources.Load<Tile>("Water_Medium");
-        water_darker = Resources.Load<Tile>("Water_Darker");
-        water_darkest = Resources.Load<Tile>("Water_Darkest");
-        black_tile = Resources.Load<Tile>("BlackTile");
+        water_shade = Resources.Load<MinesweeperTile>("Water_Shade");
+        water_medium = Resources.Load<MinesweeperTile>("Water_Medium");
+        water_darker = Resources.Load<MinesweeperTile>("Water_Darker");
+        water_darkest = Resources.Load<MinesweeperTile>("Water_Darkest");
+        black_tile = Resources.Load<MinesweeperTile>("BlackTile");
+        shore_tile = Resources.Load<MinesweeperTile>("ShoreTile");
     }
 
-    public Tile GetWaterShadeTile()
+    public MinesweeperTile GetWaterShadeTile()
     {
         return water_shade;
     }
 
-    public Tile GetWaterMediumTile()
+    public MinesweeperTile GetWaterMediumTile()
     {
         return water_medium;
     }
 
-    public Tile GetWaterDarkerTile()
+    public MinesweeperTile GetWaterDarkerTile()
     {
         return water_darker;
     }
 
-    public Tile GetWaterDarkestTile()
+    public MinesweeperTile GetWaterDarkestTile()
     {
         return water_darkest;
     }
 
-    public Tile GetBlackTile()
+    public MinesweeperTile GetBlackTile()
     {
         return black_tile;
+    }
+
+    public MinesweeperTile GetShoreTile()
+    {
+        return shore_tile;
     }
 }
