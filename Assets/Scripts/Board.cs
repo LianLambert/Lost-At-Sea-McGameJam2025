@@ -333,6 +333,11 @@ public class Board : MonoBehaviour
 
     public void RevealTile(MinesweeperTile tile, bool wasClicked)
     {
+        if (tile.isRevealed)
+        {
+            return;
+        }
+
         // visibly reveal Tile
         tile.isRevealed = true;
 
