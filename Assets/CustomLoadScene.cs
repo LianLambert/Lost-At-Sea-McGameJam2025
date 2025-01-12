@@ -35,4 +35,14 @@ public class CustomLoadScene : MonoBehaviour
         GameManager.gameIsOver = false;
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void SetDifficulty(int diff)
+    {
+        if (diff == 0)
+            GameManager.difficulty = Difficulty.Easy;
+        if (diff == 1)
+            GameManager.difficulty = Difficulty.Medium;
+        if (diff == 2)
+            GameManager.difficulty = Difficulty.Hard;
+    }
 }
