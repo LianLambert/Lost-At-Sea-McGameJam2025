@@ -37,18 +37,19 @@ public class SceneTransitionManager : MonoBehaviour
             //StartCoroutine(FadeIn());
         }
 
+        //if (SceneManager.GetActiveScene().name == "MainMenu")
+        //{
+        //    Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
+        //    Debug.Log("menu music!");
 
-        if (SceneManager.GetActiveScene().name == "MainMenu")
-        {
-            Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
 
+        //}
 
-        }
-
-        if (SceneManager.GetActiveScene().name == "SampleScene 1")
-        {
-            Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
-        }
+        //if (SceneManager.GetActiveScene().name == "SampleScene 1")
+        //{
+        //    Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
+        //    Debug.Log("level music!");
+        //}
     }
 
     /// <summary>
@@ -60,17 +61,6 @@ public class SceneTransitionManager : MonoBehaviour
         if (!isTransitioning)
         {
             StartCoroutine(Transition(sceneName));
-        }
-
-        if (sceneName == "MainMenu")
-        {
-            Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
-
-        }
-
-        if (sceneName == "SampleScene 1")
-        {
-            Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
         }
     }
 
@@ -112,6 +102,19 @@ public class SceneTransitionManager : MonoBehaviour
         }
 
         fadeImage = GameObject.FindGameObjectWithTag("fadeIn").GetComponent<Image>();
+
+
+        if (sceneName == "MainMenu")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Menu Theme - Guiding Light");
+
+        }
+
+        if (sceneName == "SampleScene 1")
+        {
+            Camera.main.GetComponent<AudioManager>().PlayMusic("Level Theme - Lost at Sea");
+        }
+
 
         // Fade-in
         if (fadeImage != null)
