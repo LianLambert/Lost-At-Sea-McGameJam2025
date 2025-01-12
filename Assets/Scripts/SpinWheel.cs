@@ -15,6 +15,11 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
     {
         Camera.main.GetComponent<AudioManager>().PlaySound("GachaRoll");
 
+        if (GameManager.numCoins <= 0)
+        {
+            GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
+            FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel").SetActive(true);
+        }
         var r = Random.Range(0, 3);
         string clip = spinForLighthouse;
         if (r == 0)

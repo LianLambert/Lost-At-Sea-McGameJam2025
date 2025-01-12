@@ -6348,7 +6348,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: "Oh no! The seas have claimed their prize. The boats remain lost, and the
     lighthouses couldn\u2019t guide the way. The ocean is unforgiving, but every
-    great sailor learns from the storms. Chart a new course and try again!\""
+    great sailor learns from the storms. Chart a new course and try again!"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
