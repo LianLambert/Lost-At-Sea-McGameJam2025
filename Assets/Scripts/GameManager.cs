@@ -1,10 +1,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    private static GameManager _instance;
+
+    public static int numLightHouses;
     private static int _numLives;
     public static int numLives
     {
@@ -36,6 +40,9 @@ public class GameManager : MonoBehaviour
         set
         {
             _numBoats = value;
+            string newBoatText = _numBoats + "/" + numBoatGoal;
+            Debug.Log(newBoatText);
+            GameObject.FindGameObjectWithTag("NumBoats").GetComponent<TextMeshProUGUI>().text = newBoatText;
 
             // All boats found
             if (_numBoats >= numBoatGoal)
@@ -52,14 +59,14 @@ public class GameManager : MonoBehaviour
     public static Difficulty difficulty;
     public static Animator WinStates;
 
+    private void Awake()
+    {
+        _instance = this;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        numBoatsCollected = 0;
-        numLives = 3;
-        numTilesRevealed = 0;
-
         // TO DO: Manage these values when playtesting
         switch (difficulty)
         {
@@ -67,23 +74,32 @@ public class GameManager : MonoBehaviour
                 numCoins = 50;
                 timeRemaining = 300;
                 numBoatGoal = 1;
+                numLightHouses = 4;
                 break;
 
             case Difficulty.Medium:
                 numCoins = 80;
                 timeRemaining = 400;
                 numBoatGoal = 3;
+                numLightHouses = 3;
                 break;
 
             case Difficulty.Hard:
                 numCoins = 100;
                 timeRemaining = 500;
                 numBoatGoal = 5;
+                numLightHouses = 2;
                 break;
         }
 
+        numBoatsCollected = 0;
+        numLives = 3;
+        numTilesRevealed = 0;
+        GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
+        GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
+
         // Timer coroutine every second
-        StartCoroutine(TimerCountdown());
+        Invoke("TimerCountdown", 1f);
     }
 
     // Update is called once per frame
@@ -100,19 +116,47 @@ public class GameManager : MonoBehaviour
 
     private static void StartGameWin()
     {
-        // to do: implement
-        // WinStates.Play("GameWin");
+        //WinStates.Play("GameWin");
+
+        //TODO Play Win Sound/Animations
+
+        _instance.StartCoroutine(_instance.DelayedWinReveal());
     }
 
-    IEnumerator TimerCountdown()
+    private IEnumerator DelayedWinReveal()
     {
-        while (timeRemaining > 0)
-        {
-            yield return new WaitForSeconds(1);
-            timeRemaining--;
-        }
+        yield return new WaitForSeconds(1.5f); // Wait for 2 seconds
 
-        StartGameLoss();
+        // Reveal the win panel
+        var WinPanel = FindInactiveByTag.FindInactiveGameObjectByTag("WinPanel");
+        if (WinPanel != null)
+        {
+            WinPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("WinPanel not found!");
+        }
+    }
+
+    static string FormatTime(int totalSeconds)
+    {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return $"{minutes}:{seconds:D2}"; // Format seconds with two digits
+    }
+
+    void TimerCountdown()
+    {
+        if (timeRemaining == 0)
+        {
+            StartGameLoss();
+        }
+        GameObject.FindGameObjectWithTag("NumTimeLeft").GetComponent<TextMeshProUGUI>().text = FormatTime(timeRemaining);
+        timeRemaining--;
+        Invoke("TimerCountdown", 1f);
+
+
     }
 
     // Pausing the game, covering the screen
@@ -131,5 +175,23 @@ public class GameManager : MonoBehaviour
     public void Quit()
     {
         // TO DO
+    }
+}
+
+
+public class FindInactiveByTag : MonoBehaviour
+{
+    public static GameObject FindInactiveGameObjectByTag(string tag)
+    {
+        GameObject[] allGameObjects = Resources.FindObjectsOfTypeAll<GameObject>();
+        foreach (GameObject obj in allGameObjects)
+        {
+            if (obj.CompareTag(tag) && obj.hideFlags == HideFlags.None)
+            {
+                return obj;
+            }
+        }
+
+        return null; // Return null if no matching GameObject is found
     }
 }

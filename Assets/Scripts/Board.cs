@@ -66,6 +66,14 @@ public class Board : MonoBehaviour
         {
             HandleDropAction();
         }
+
+        //TODO REMOVE THIS
+        else if (Input.GetKeyDown(KeyCode.P)) // Detect when the mouse button is released
+        {
+            GameManager.numLightHouses++;
+            GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
+
+        }
     }
 
     private void HandleDropAction()
@@ -82,6 +90,8 @@ public class Board : MonoBehaviour
 
             Destroy(FindObjectOfType<DragAndDropLightHouse>().currentPrefab);
             DragAndDropLightHouse.isDragging = false;
+            GameManager.numLightHouses--;
+            GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
             PlaceLighthouse(droppedTile, LightHouseType.Basic);
         }
     }
@@ -142,7 +152,7 @@ public class Board : MonoBehaviour
 
     private void PopulateBoardItems()
     {
-        PopulateTileContents(TileContent.Boat, numItems.boats);
+        PopulateTileContents(TileContent.Boat, GameManager.numBoatGoal);
         PopulateTileContents(TileContent.Shark, numItems.sharks);
         PopulateTileContents(TileContent.TreasureSmall, numItems.treasureSmall);
         PopulateTileContents(TileContent.TreasureMedium, numItems.treasureMedium);
@@ -307,6 +317,7 @@ public class Board : MonoBehaviour
             case TileContent.TreasureMedium:
             case TileContent.TreasureLarge:
                 GameManager.numCoins += treasureValues[tile.tileContent];
+                GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
                 // to do: add animation
                 tile.tileContent = TileContent.Empty;
                 StartCoroutine(CallUpdateTileSpriteAfterDelay(tile));
@@ -418,6 +429,8 @@ public class Board : MonoBehaviour
         if (tile.tileContent == TileContent.Lighthouse)
             tile.m_AnimatedSprites = boardTileHolder.GetLightHouse().m_AnimatedSprites;
 
+        if (tile.tileContent == TileContent.TreasureSmall || tile.tileContent == TileContent.TreasureMedium || tile.tileContent == TileContent.TreasureLarge)
+            tile.m_AnimatedSprites = boardTileHolder.GetCoin().m_AnimatedSprites;
 
         UpdateSpriteLayers(tile);
         tilemap.RefreshTile(GetCoordsByTile(tile));
@@ -427,7 +440,7 @@ public class Board : MonoBehaviour
     private IEnumerator CallUpdateTileSpriteAfterDelay(MinesweeperTile tile)
     {
         // Wait for 2 seconds
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1.25f);
 
         // Call the method
         UpdateTileSprite(tile);
@@ -453,6 +466,23 @@ public class Board : MonoBehaviour
             tile.m_MaxSpeed = 6;
             tile.m_MinSpeed = 6;
             shadowTileMap.SetTile(position, null);
+            var danger = GetTileDangerLevelByCoord(position.x, position.y);
+            if (danger == 0)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
+            if (danger == 1 || danger == 2)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterMediumTile()));
+            if (danger == 3)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkerTile()));
+            if (danger >= 4)
+                BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterDarkestTile()));
+            // TODO Make sure boat water levels reflect danger levels if we agree it looks nice
+        }else if (item == TileContent.Lighthouse)
+        {
+            BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
+        }else if (item == TileContent.TreasureSmall || item == TileContent.TreasureMedium || item == TileContent.TreasureLarge)
+        {
+            shadowTileMap.SetTile(position, null);
+
             var danger = GetTileDangerLevelByCoord(position.x, position.y);
             if (danger == 0)
                 BelowTitleMap.SetTile(position, Instantiate<MinesweeperTile>(boardTileHolder.GetWaterShadeTile()));
