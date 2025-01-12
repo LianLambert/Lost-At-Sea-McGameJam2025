@@ -5417,6 +5417,8 @@ MonoBehaviour:
   DangerNumbersTileMap: {fileID: 1973156772}
   DangerNumberText: {fileID: 5137208287673353722, guid: ff0917275574a4e83b0a04e2a32b5211, type: 3}
   SharkMarkerX: {fileID: 5137208287673353722, guid: 4ff146570b85f4b9fb3d05dbb758c802, type: 3}
+  BoatPrefab: {fileID: 3752211630442474671, guid: c7d6f2224066a40f199f2bc269b57aac, type: 3}
+  TreasurePrefab: {fileID: 1592898929823744365, guid: 9f02fbb67fdda4d81a22e208c678f765, type: 3}
   lighthouseCost: 60
 --- !u!1 &2056020345
 GameObject:
