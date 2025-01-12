@@ -14,18 +14,6 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
     public void OnPointerDown(PointerEventData eventData)
     {
 
-        if (GameManager.numCoins >= 50)
-        {
-            GameManager.numCoins -= 50;
-            GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
-        }
-        else
-        {
-            GameManager.numCoins = 0;
-            FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel").SetActive(true);
-            return;
-        }
-
         var r = Random.Range(0, 3);
         string clip = spinForLighthouse;
         if (r == 0)
@@ -38,6 +26,18 @@ public class SpinWheel : MonoBehaviour, IPointerDownHandler
         prizeWheel.lastSpenPrize = clip;
         prizeWheelParent.SetActive(true);
         prizeWheel.GetComponent<Animator>().Play(clip);
+
+        if (GameManager.numCoins >= 50)
+        {
+            GameManager.numCoins -= 50;
+            GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
+        }
+        else
+        {
+            GameManager.numCoins = 0;
+            GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
+            FindInactiveByTag.FindInactiveGameObjectByTag("DebtPanel").SetActive(true);
+        }
     }
 
     // Start is called before the first frame update
