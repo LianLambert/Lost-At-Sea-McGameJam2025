@@ -16,7 +16,7 @@ public class Board : MonoBehaviour
     // board properties
     public int rows;
     public int columns;
-    public Difficulty difficulty;
+    public Difficulty difficulty => GameManager.difficulty;
     private NumItemsByDifficulty numItems;
     private HashSet<Vector3Int> usedPositions = new HashSet<Vector3Int>();
 
@@ -110,10 +110,14 @@ public class Board : MonoBehaviour
 
             Destroy(FindObjectOfType<DragAndDropLightHouse>().currentPrefab);
             DragAndDropLightHouse.isDragging = false;
-            GameManager.numLightHouses--;
-            GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
 
-            PlaceLighthouse(droppedTile, DragAndDropLightHouse.draggingLightHouseType);
+            if (droppedTile != null)
+            {
+                GameManager.numLightHouses--;
+                GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
+
+                PlaceLighthouse(droppedTile, DragAndDropLightHouse.draggingLightHouseType);
+            }
         }
     }
 
@@ -167,13 +171,13 @@ public class Board : MonoBehaviour
             case Difficulty.Easy:
                 rows = 10;
                 columns = 14;
-                AdjustCamera(new Vector3(8.83f, 5.03f, -10), 4.98f);
+                AdjustCamera(new Vector3(8.85f, 5.02f, -10), 4.98f);
                 break;
 
             case Difficulty.Medium:
                 rows = 20;
                 columns = 28;
-                AdjustCamera(new Vector3(17.7f, 10f ,-10), 9.97f);
+                AdjustCamera(new Vector3(17.75f, 10f ,-10), 9.97f);
                 break;
 
             case Difficulty.Hard:
@@ -189,6 +193,8 @@ public class Board : MonoBehaviour
 
         Debug.Log($"Board configured for {difficulty} difficulty: Rows={rows}, Columns={columns}");
     }
+
+    // TODO make lighthouse number not go down when not over tile
 
     private void GetTileOnClick()
     {
@@ -508,6 +514,10 @@ public class Board : MonoBehaviour
             for (var j = 0; j < columns; j++)
             {
                 var currentTile = tilemap.GetTile(new Vector3Int(i,j,0)) as MinesweeperTile;
+
+                if (currentTile == null)
+                    continue;
+
                 if (!currentTile.isRevealed && currentTile.tileContent == TileContent.Empty)
                 {
                     currentTile.tileContent = TileContent.Boat;

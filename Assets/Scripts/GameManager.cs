@@ -6,8 +6,6 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager _instance;
-
     public static int numLightHouses;
     private static int _numLives;
     public static int numLives
@@ -23,7 +21,7 @@ public class GameManager : MonoBehaviour
             // No more life points
             if (_numLives < 1)
             {
-                StartGameLoss();
+                Camera.main.GetComponent<GameManager>().StartGameLoss();
             }
         }
     }
@@ -47,7 +45,7 @@ public class GameManager : MonoBehaviour
             // All boats found
             if (_numBoats >= numBoatGoal)
             {
-                StartGameWin();
+                Camera.main.GetComponent<GameManager>().StartGameWin();
             }
         }
     }
@@ -59,11 +57,6 @@ public class GameManager : MonoBehaviour
     public static Difficulty difficulty;
     public static Animator WinStates;
     public static bool gameIsOver = false;
-
-    private void Awake()
-    {
-        _instance = this;
-    }
 
     // Start is called before the first frame update
     void Start()
@@ -109,19 +102,19 @@ public class GameManager : MonoBehaviour
         
     }
 
-    private static void StartGameLoss()
+    public void StartGameLoss()
     {
         // to do: implement
         // WinStates.Play("GameLoss");
         gameIsOver = true;
-        _instance.StartCoroutine(_instance.DelayedLossReveal());
+
+
+        Invoke("DelayedLossReveal", 1.5f);
 
     }
 
-    private IEnumerator DelayedLossReveal()
+    private void DelayedLossReveal()
     {
-        yield return new WaitForSeconds(1.5f); // Wait for 2 seconds
-
         // Reveal the win panel
         var WinPanel = FindInactiveByTag.FindInactiveGameObjectByTag("LossPanel");
         if (WinPanel != null)
@@ -134,18 +127,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private static void StartGameWin()
+    public void StartGameWin()
     {
         //WinStates.Play("GameWin");
 
         //TODO Play Win Sound/Animations
         gameIsOver = true;
-        _instance.StartCoroutine(_instance.DelayedWinReveal());
+        Invoke("DelayedWinReveal", 1.5f);
     }
 
-    private IEnumerator DelayedWinReveal()
+    private void DelayedWinReveal()
     {
-        yield return new WaitForSeconds(1.5f); // Wait for 2 seconds
 
         // Reveal the win panel
         var WinPanel = FindInactiveByTag.FindInactiveGameObjectByTag("WinPanel");
