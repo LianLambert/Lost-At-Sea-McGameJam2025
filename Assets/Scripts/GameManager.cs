@@ -74,8 +74,8 @@ public class GameManager : MonoBehaviour
             case Difficulty.Easy:
                 numCoins = 50;
                 timeRemaining = 300;
-                numBoatGoal = 1;
-                numLightHouses = 4;
+                numBoatGoal = 2;
+                numLightHouses = 3;
                 break;
 
             case Difficulty.Medium:
@@ -113,6 +113,25 @@ public class GameManager : MonoBehaviour
     {
         // to do: implement
         // WinStates.Play("GameLoss");
+        gameIsOver = true;
+        _instance.StartCoroutine(_instance.DelayedLossReveal());
+
+    }
+
+    private IEnumerator DelayedLossReveal()
+    {
+        yield return new WaitForSeconds(1.5f); // Wait for 2 seconds
+
+        // Reveal the win panel
+        var WinPanel = FindInactiveByTag.FindInactiveGameObjectByTag("LossPanel");
+        if (WinPanel != null)
+        {
+            WinPanel.SetActive(true);
+        }
+        else
+        {
+            Debug.LogError("WinPanel not found!");
+        }
     }
 
     private static void StartGameWin()

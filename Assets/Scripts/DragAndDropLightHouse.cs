@@ -3,9 +3,12 @@ using UnityEngine.EventSystems;
 
 public class DragAndDropLightHouse : MonoBehaviour, IPointerDownHandler, IDragHandler, IPointerUpHandler
 {
-    public GameObject prefab;
+    public GameObject lightHouseBasic;
+    public GameObject lightHouseHorizontal;
+    public GameObject lightHouseVertical;
     public  GameObject currentPrefab;
     public static bool isDragging = false;
+    public static LightHouseType draggingLightHouseType;
     private Camera mainCamera;
 
     void Start()
@@ -23,7 +26,24 @@ public class DragAndDropLightHouse : MonoBehaviour, IPointerDownHandler, IDragHa
             isDragging = true;
             Vector3 mousePosition = mainCamera.ScreenToWorldPoint(eventData.position);
             mousePosition.z = 0; // Make sure the prefab is at the right Z level
-            currentPrefab = Instantiate(prefab, mousePosition, Quaternion.identity);
+
+
+            var r = Random.Range(0, 3);
+            if (r == 0)
+            {
+                draggingLightHouseType = LightHouseType.Basic;
+                currentPrefab = Instantiate(lightHouseBasic, mousePosition, Quaternion.identity);
+            }
+            if (r == 1)
+            {
+                draggingLightHouseType = LightHouseType.Horizontal;
+                currentPrefab = Instantiate(lightHouseHorizontal, mousePosition, Quaternion.identity);
+            }
+            if (r == 2)
+            {
+                draggingLightHouseType = LightHouseType.Vertical;
+                currentPrefab = Instantiate(lightHouseVertical, mousePosition, Quaternion.identity);
+            }
         }
     }
 

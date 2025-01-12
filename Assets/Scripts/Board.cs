@@ -105,7 +105,8 @@ public class Board : MonoBehaviour
             DragAndDropLightHouse.isDragging = false;
             GameManager.numLightHouses--;
             GameObject.FindGameObjectWithTag("NumLightHouses").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLightHouses.ToString();
-            PlaceLighthouse(droppedTile, LightHouseType.Basic);
+
+            PlaceLighthouse(droppedTile, DragAndDropLightHouse.draggingLightHouseType);
         }
     }
 
@@ -355,6 +356,8 @@ public class Board : MonoBehaviour
                 {
                     // to do: add animation
                     GameManager.numLives -= 1;
+                    GameObject.FindGameObjectWithTag("HeartText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numLives.ToString();
+
                 }
                 break;
             case TileContent.TreasureSmall:
