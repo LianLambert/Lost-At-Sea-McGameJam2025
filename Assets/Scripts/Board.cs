@@ -160,7 +160,18 @@ public class Board : MonoBehaviour
         // Get the tile at the clicked cell position
         MinesweeperTile clickedTile = tilemap.GetTile(cellPosition) as MinesweeperTile;
 
-        if (clickedTile != null && !clickedTile.isRevealed)
+        if (clickedTile == null)
+        {
+            return;
+        }
+
+        if (clickedTile.sharkMarker)
+        {
+            Destroy(clickedTile.sharkMarker);
+            clickedTile.sharkMarker = null;
+
+        }
+        else if (!clickedTile.isRevealed)
         {
             RevealTile(clickedTile, true);
         }
@@ -322,6 +333,11 @@ public class Board : MonoBehaviour
 
     public void RevealTile(MinesweeperTile tile, bool wasClicked)
     {
+        if (tile.isRevealed)
+        {
+            return;
+        }
+
         // visibly reveal Tile
         tile.isRevealed = true;
 
@@ -333,7 +349,7 @@ public class Board : MonoBehaviour
         {
             case TileContent.Empty:
 
-                // to do: uncomment for propagated revealing (danger level 0 only)
+                // to do: ONE/TWO! uncomment for propagated revealing (danger level 0 only)
                 if (tile.dangerLevel == 0)
                 {
                     Vector3Int tileCoords = GetCoordsByTile(tile);
@@ -363,6 +379,19 @@ public class Board : MonoBehaviour
             case TileContent.TreasureSmall:
             case TileContent.TreasureMedium:
             case TileContent.TreasureLarge:
+                // to do: TWO/TWO! uncomment for propagated revealing (danger level 0 only)
+                if (tile.dangerLevel == 0)
+                {
+                    Vector3Int tileCoords = GetCoordsByTile(tile);
+
+                    foreach (MinesweeperTile neighbourTile in GetTileNeighboursByCoord(tileCoords.x, tileCoords.y))
+                    {
+                        if (!neighbourTile.isRevealed && neighbourTile.tileContent != TileContent.Boat)
+                        {
+                            StartCoroutine(CallRevealTileAfterDelay(neighbourTile, false));
+                        }
+                    }
+                }
                 GameManager.numCoins += treasureValues[tile.tileContent];
                 GameObject.FindGameObjectWithTag("NumCoinsText").GetComponent<TMPro.TextMeshProUGUI>().text = GameManager.numCoins.ToString();
                 // to do: add animation
