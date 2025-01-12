@@ -230,7 +230,7 @@ public class Board : MonoBehaviour
                 usedPositions.Add(position);
                 numPopulatedItems++;
                 tilemap.SetTile(position, randomTile);
-
+                
                 // if all positions are used, throw an exception or stop
                 if (usedPositions.Count >= totalTiles)
                 {
@@ -406,6 +406,10 @@ public class Board : MonoBehaviour
             case TileContent.Boat:
                 // to do: add animation
                 Debug.Log("Lighthouse placed ON boat");
+
+                if (TryMoveBoatToHiddenAndEmptySquare(tile))
+                    break;
+
                 GameManager.numBoatsCollected++;
                 break;
             case TileContent.TreasureSmall:
@@ -424,6 +428,34 @@ public class Board : MonoBehaviour
         {
             RevealTile(revealTile, false);
         }
+    }
+
+    private bool TryMoveBoatToHiddenAndEmptySquare(MinesweeperTile OldTile)
+    {
+
+        for (var i = 0; i < rows; i++)
+        {
+            for (var j = 0; j < columns; j++)
+            {
+                var currentTile = tilemap.GetTile(new Vector3Int(i,j,0)) as MinesweeperTile;
+                if (!currentTile.isRevealed && currentTile.tileContent == TileContent.Empty)
+                {
+                    currentTile.tileContent = TileContent.Boat;
+                    OldTile.tileContent = TileContent.Lighthouse;
+                    Debug.Log("BOAT MOVED!");
+                    tilemap.RefreshTile(GetCoordsByTile(currentTile));
+                    tilemap.RefreshTile(GetCoordsByTile(OldTile));
+
+                    tilemap.SetTile(new Vector3Int(i, j, 0), currentTile);
+                    shadowTileMap.SetTile(new Vector3Int(i, j, 0), Instantiate<MinesweeperTile>(boardTileHolder.GetBoat()));
+                    return true;
+                }
+            }
+        }
+
+        Debug.Log("SORRY FAILED TO MOVE BOAT");
+
+        return false;
     }
 
     private List<MinesweeperTile> GetLighthouseRevealTiles(LightHouseType lighthouseType, int lhXCoord, int lhYCoord)
