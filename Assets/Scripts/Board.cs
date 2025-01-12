@@ -342,6 +342,7 @@ public class Board : MonoBehaviour
                 break;
             case TileContent.Boat:
                 // to do: add animation
+                Debug.Log("Lighthouse placed ON boat");
                 GameManager.numBoatsCollected++;
                 break;
             case TileContent.TreasureSmall:
@@ -417,7 +418,6 @@ public class Board : MonoBehaviour
 
         if (tile.tileContent == TileContent.Lighthouse)
             tile.m_AnimatedSprites = boardTileHolder.GetLightHouse().m_AnimatedSprites;
-
 
         UpdateSpriteLayers(tile);
         tilemap.RefreshTile(GetCoordsByTile(tile));
