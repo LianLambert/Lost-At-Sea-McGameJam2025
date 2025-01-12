@@ -33,6 +33,6 @@ public class CustomLoadScene : MonoBehaviour
     public void LoadCURRENTdirtty()
     {
         GameManager.gameIsOver = false;
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
