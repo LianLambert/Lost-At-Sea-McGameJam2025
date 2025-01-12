@@ -9,6 +9,7 @@ using UnityEngine.Tilemaps;
 public class MinesweeperTile : AnimatedTile
 {
     public bool isRevealed;
+    public GameObject dangerNumberText;
 
     private int _dangerLevel;
     public int dangerLevel
