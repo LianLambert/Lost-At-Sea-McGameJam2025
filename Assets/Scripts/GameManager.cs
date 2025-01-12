@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
 
     private static int _numBoats;
 
-    public static int numBoats
+    public static int numBoatsCollected
     {
         get
         {
@@ -56,7 +56,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        numBoats = 0;
+        numBoatsCollected = 0;
         numLives = 3;
         numTilesRevealed = 0;
 
