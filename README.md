@@ -4,6 +4,8 @@ Submitted for [McGameJam 2025](https://itch.io/jam/mcgame-jam-2025)
 
 Find the game on [Itch.io](https://lianl.itch.io/lost-at-sea)!
 
+Made using Unity
+
 <div><img src="images/bern.png" width="200px" align="left">
 <p>Ay, ay sailor! Me name is Ber'n, I'm yer capt'n. Shiver me timbers, what a storm we have there tonight. Lots of blokes will fall to Neptune with such a weather. Unless you help them! Yer job will be to rescue these lost souls at sea so they don't get eaten by sharks. In this twisted take on minesweeper, build lighthouses at sea and find your mates before the sharks do! Their lives are in yer hand sailor!</p></div>
 <br><br><br>
