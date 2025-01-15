@@ -23,6 +23,9 @@ Made using Unity
 - **Fast Mode:** Fast mode reveals all adjacent empty tiles if the selected square is clear
 
 ### Screenshots:
+<img src="images/lostAtSea.png" width="800px" align="left">
+<br><br><br><br><br><br><br><br><br><br>
+<br><br><br><br><br><br><br><br><br><br>
 <img src="images/easy.png" width="800px" align="left">
 <br><br><br><br><br><br><br><br><br><br>
 <br><br><br><br><br><br><br><br><br><br>
