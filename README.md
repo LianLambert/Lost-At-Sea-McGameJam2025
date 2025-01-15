@@ -14,13 +14,16 @@ Made using Unity
 - **Mouse:** Click and Drag to Drop Lighthouses
 
 ### Gameplay Overview:
-- **Goal:** The goal? Find all the boats while avoiding the sharks
+- **Goal:** Find all of the lost boats while avoiding the sharks
 - **Lighthouses:** Drag and drop lighthouses to uncover the sea
 - **Gacha Wheel:** Spend 50 coins to spin the wheel for a chance to win coins, lighthouses, or extra lives!
-
-### Game Modes:
 - **Show Numbers:** Show numbers reveals exactly how many sharks surround a square
 - **Fast Mode:** Fast mode reveals all adjacent empty tiles if the selected square is clear
+
+### Levels:
+- **Easy:** Like a gentle sea breeze—just a few waves to splash through
+- **Medium:** Grab your compass and get ready for a steady, thrilling sail. Not too smooth, not too wild
+- **Hard:** The sea’s angry, the sharks are hungry, and the treasure’s well hidden. Good luck, sailor!
 
 ### Screenshots:
 <img src="images/lostAtSea.png" width="800px" align="left">
