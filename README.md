@@ -1,6 +1,6 @@
 # Lost At Sea
 
-Submitted for [McGameJam 2025](https://itch.io/jam/mcgame-jam-2025)
+Submitted for [McGameJam 2025]([https://itch.io/jam/mcgame-jam-2025](https://itch.io/jam/mcgame-jam-2025/entries))
 
 Find the game on [Itch.io](https://lianl.itch.io/lost-at-sea)!
 
