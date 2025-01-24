@@ -2,7 +2,7 @@
 
 Submitted for [McGameJam 2025](https://itch.io/jam/mcgame-jam-2025/entries) (Theme: Lost and Found)
 
-Find the game on [Itch.io](https://lianl.itch.io/lost-at-sea)!
+Find the game on [Itch.io](https://lianl.itch.io/lost-at-sea) or watch a demo [here](https://www.youtube.com/watch?v=FVWS2cOupnk&t=16s&ab_channel=Lian)!
 
 Made using Unity
 
